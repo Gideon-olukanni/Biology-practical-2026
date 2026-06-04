@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAEC Biology Practical — Master Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=Source+Serif+4:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d1117;
+    --paper: #f5f0e8;
+    --cream: #ede8dc;
+    --accent: #b5451b;
+    --accent2: #2a6b3f;
+    --gold: #c9860a;
+    --rule: #c4b89a;
+    --muted: #6b5e4e;
+    --highlight: #fff3cd;
+    --blue: #1a4a7a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2rem 1.5rem 1.5rem;
+    text-align: center;
+    border-bottom: 4px solid var(--accent);
+    position: relative;
+  }
+  header::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--accent);
+    margin: 0 auto 1rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 5vw, 2.4rem);
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  header p {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--rule);
+    margin-top: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .badge-row {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    justify-content: center; margin-top: 1rem;
+  }
+  .badge {
+    background: var(--accent);
+    color: white;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    padding: 0.25rem 0.7rem;
+    border-radius: 2px;
+  }
+  .badge.green { background: var(--accent2); }
+  .badge.gold { background: var(--gold); }
+
+  /* NAV */
+  nav {
+    background: var(--cream);
+    border-bottom: 2px solid var(--rule);
+    padding: 0.6rem 1rem;
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    position: sticky; top: 0; z-index: 100;
+  }
+  nav button {
+    background: none;
+    border: 1.5px solid var(--rule);
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    padding: 0.3rem 0.7rem;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  nav button:hover, nav button.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  main { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+  section.panel { display: none; }
+  section.panel.active { display: block; }
+
+  /* SECTION HEADING */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--ink);
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 0.4rem;
+    margin: 2rem 0 1.2rem;
+  }
+  .section-title span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    font-weight: 400;
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 0.2rem;
+    text-transform: uppercase;
+  }
+
+  /* SPECIMEN CARDS */
+  .specimen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+  }
+  .spec-card {
+    background: white;
+    border: 1.5px solid var(--rule);
+    border-top: 3px solid var(--accent);
+    padding: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 3px;
+  }
+  .spec-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+  .spec-card .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .spec-card .name { font-weight: 600; font-size: 0.85rem; margin-top: 0.2rem; }
+  .spec-card .cat {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  /* SPECIMEN DETAIL */
+  .spec-detail { display: none; }
+  .spec-detail.active { display: block; }
+  .back-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    background: none;
+    border: 1.5px solid var(--rule);
+    padding: 0.3rem 0.8rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    border-radius: 2px;
+    color: var(--muted);
+  }
+  .back-btn:hover { background: var(--ink); color: white; border-color: var(--ink); }
+
+  .spec-header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 1.2rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
+  .spec-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    min-width: 2.5rem;
+  }
+  .spec-header h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; }
+  .spec-header p { font-size: 0.8rem; color: var(--rule); font-style: italic; }
+
+  .info-block {
+    background: white;
+    border: 1.5px solid var(--rule);
+    border-left: 4px solid var(--accent);
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+    border-radius: 0 4px 4px 0;
+  }
+  .info-block h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+  .info-block.green { border-left-color: var(--accent2); }
+  .info-block.green h3 { color: var(--accent2); }
+  .info-block.gold { border-left-color: var(--gold); }
+  .info-block.gold h3 { color: var(--gold); }
+  .info-block.blue { border-left-color: var(--blue); }
+  .info-block.blue h3 { color: var(--blue); }
+
+  ul.feat { list-style: none; padding: 0; }
+  ul.feat li { padding: 0.2rem 0 0.2rem 1.2rem; position: relative; }
+  ul.feat li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 0.8rem; }
+
+  table.waec {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin: 0.6rem 0;
+  }
+  table.waec th {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.5rem 0.8rem;
+    text-align: left;
+  }
+  table.waec td {
+    border-bottom: 1px solid var(--rule);
+    padding: 0.45rem 0.8rem;
+    vertical-align: top;
+  }
+  table.waec tr:nth-child(even) td { background: var(--cream); }
+
+  .q-block {
+    background: var(--highlight);
+    border: 1.5px solid var(--gold);
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .q-block .q {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--ink);
+  }
+  .q-block .a {
+    color: var(--accent2);
+    font-size: 0.9rem;
+  }
+  .q-block .marks {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-top: 0.4rem;
+  }
+
+  .tip-box {
+    background: #fff8f0;
+    border: 2px dashed var(--accent);
+    border-radius: 4px;
+    padding: 0.8rem 1.1rem;
+    margin: 1rem 0;
+    font-size: 0.88rem;
+  }
+  .tip-box strong { color: var(--accent); }
+
+  .examiner-secret {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    font-size: 0.88rem;
+  }
+  .examiner-secret h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  /* HOW WAEC SETS */
+  .waec-formula {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.2rem 0;
+  }
+  .formula-card {
+    background: white;
+    border: 1.5px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    padding: 1rem;
+    border-radius: 3px;
+  }
+  .formula-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+  }
+  .formula-card p { font-size: 0.82rem; color: var(--muted); }
+  .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .mnemonic {
+    background: linear-gradient(135deg, #e8f5e9, #f3f8e8);
+    border: 2px solid var(--accent2);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .mnemonic h4 { color: var(--accent2); font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .mnemonic .word { font-size: 1.3rem; font-weight: 700; color: var(--accent2); font-family: 'Playfair Display', serif; }
+
+  footer {
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    padding: 1.5rem;
+    border-top: 1px solid var(--rule);
+    margin-top: 3rem;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 600px) {
+    .spec-header { flex-direction: column; gap: 0.5rem; }
+    nav { gap: 0.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>WAEC Biology Practical<br>Master Study Guide</h1>
+  <p>Examiner-Level Preparation · Based on Your Specimen Set</p>
+  <div class="badge-row">
+    <span class="badge">Paper 3 · Alt A</span>
+    <span class="badge green">80 Marks · 2 Hours</span>
+    <span class="badge gold">A1 Target</span>
+    <span class="badge">16 Specimens Covered</span>
+  </div>
+</header>
+
+<nav id="mainNav">
+  <button class="active" onclick="showPanel('overview')">Overview</button>
+  <button onclick="showPanel('how-waec-sets')">How WAEC Sets Questions</button>
+  <button onclick="showPanel('specimens')">All Specimens</button>
+  <button onclick="showPanel('questions')">WAEC Questions Bank</button>
+  <button onclick="showPanel('food-tests')">Food Tests</button>
+  <button onclick="showPanel('drawings')">Drawing Rules</button>
+  <button onclick="showPanel('comparisons')">Comparison Tables</button>
+  <button onclick="showPanel('mistakes')">Common Mistakes</button>
+  <button onclick="showPanel('mnemonics')">Mnemonics</button>
+</nav>
+
+<main>
+
+<!-- OVERVIEW -->
+<section class="panel active" id="panel-overview">
+  <div class="section-title"><span>Introduction</span>Your Road to A1</div>
+
+  <div class="info-block">
+    <h3>What is WAEC Biology Practical?</h3>
+    <p>Biology Paper 3 (Alternative A) tests whether you can observe, identify, draw, compare, and explain biological specimens in a real exam setting. It is <strong>the most mark-intensive Biology paper</strong> — 80 marks — and the easiest to score high on if you prepare correctly.</p>
+  </div>
+
+  <div class="waec-formula">
+    <div class="formula-card">
+      <div class="num">80</div>
+      <h4>Total Marks</h4>
+      <p>3 compulsory questions. Every mark counts toward your final grade.</p>
+    </div>
+    <div class="formula-card">
+      <div class="num">2hrs</div>
+      <h4>Duration</h4>
+      <p>Roughly 40 minutes per question. Manage your time from question 1.</p>
+    </div>
+    <div class="formula-card">
+      <div class="num">3</div>
+      <h4>Questions</h4>
+      <p>Each question focuses on a different biological theme or group of specimens.</p>
+    </div>
+    <div class="formula-card">
+      <div class="num">–1</div>
+      <h4>Penalty</h4>
+      <p>One mark deducted if you write comparisons in prose instead of a table.</p>
+    </div>
+  </div>
+
+  <div class="info-block green">
+    <h3>What Examiners Test</h3>
+    <ul class="feat">
+      <li>Identify the specimen by correct name (common and/or scientific)</li>
+      <li>List observable/external features (what you can see, touch, feel)</li>
+      <li>State functions of structures</li>
+      <li>Compare two specimens in a table</li>
+      <li>Draw and label a biological diagram</li>
+      <li>State adaptive features with explanations</li>
+      <li>State economic importance</li>
+      <li>Classify: Kingdom → Phylum → Class</li>
+      <li>Describe ecological relationships (parasitism, mutualism, etc.)</li>
+      <li>Food tests and expected results</li>
+    </ul>
+  </div>
+
+  <div class="examiner-secret">
+    <h3>🔑 Chief Examiner's Secret</h3>
+    <p>WAEC examiners award marks for <em>content points</em>, not for long paragraphs. One clear sentence per point is better than four vague sentences. Every observable feature must be from <strong>direct observation</strong> — describe what you see on the specimen, not what your textbook says.</p>
+  </div>
+</section>
+
+<!-- HOW WAEC SETS -->
+<section class="panel" id="panel-how-waec-sets">
+  <div class="section-title"><span>Examiner Intelligence</span>How WAEC Sets Biology Practical Questions</div>
+
+  <div class="info-block gold">
+    <h3>The WAEC Question Formula</h3>
+    <p>Every WAEC Biology practical question follows a predictable structure. Once you know the formula, no question will surprise you.</p>
+  </div>
+
+  <div class="waec-formula">
+    <div class="formula-card">
+      <h4>Step 1 — Identification</h4>
+      <p>"Identify specimen A / State the common name of specimen B."<br><em>1–2 marks</em></p>
+    </div>
+    <div class="formula-card">
+      <h4>Step 2 — Observable Features</h4>
+      <p>"State THREE observable features of specimen A."<br><em>3 marks (1 per point)</em></p>
+    </div>
+    <div class="formula-card">
+      <h4>Step 3 — Functions / Uses</h4>
+      <p>"State TWO functions of the structure labelled X" or "State TWO economic importances."<br><em>2–4 marks</em></p>
+    </div>
+    <div class="formula-card">
+      <h4>Step 4 — Classification</h4>
+      <p>"State the phylum and class of specimen A."<br><em>2 marks</em></p>
+    </div>
+    <div class="formula-card">
+      <h4>Step 5 — Comparison</h4>
+      <p>"Tabulate THREE differences between specimens A and K."<br><em>3–6 marks (must be in table)</em></p>
+    </div>
+    <div class="formula-card">
+      <h4>Step 6 — Adaptation</h4>
+      <p>"State TWO adaptive features of specimen J for its habitat."<br><em>2–4 marks</em></p>
+    </div>
+    <div class="formula-card">
+      <h4>Step 7 — Drawing</h4>
+      <p>"Make a labelled drawing 6–8 cm long of specimen F."<br><em>6–10 marks</em></p>
+    </div>
+    <div class="formula-card">
+      <h4>Step 8 — Ecology</h4>
+      <p>"Name the type of relationship shown in specimen G."<br><em>1–2 marks</em></p>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1.1rem; margin-top:1.5rem;">How WAEC Chooses Specimens Each Year</div>
+  <div class="info-block blue">
+    <h3>The Selection System</h3>
+    <ul class="feat">
+      <li>WAEC examiners work from the <strong>official WAEC Biology syllabus</strong> — every specimen must appear in the syllabus topics</li>
+      <li>Specimens are selected to cover at least 3 of the 5 biological kingdoms (Plants, Animals, Fungi, etc.)</li>
+      <li>At least one specimen must allow a <strong>biological drawing question</strong></li>
+      <li>At least one specimen must allow a <strong>comparison/tabulation question</strong></li>
+      <li>Questions must test across different cognitive levels: recall, application, analysis</li>
+      <li>Specimens are chosen so schools in all WAEC countries (Nigeria, Ghana, Sierra Leone, etc.) can source them locally</li>
+      <li>Examiners deliberately mix plant and animal specimens to prevent narrow preparation</li>
+      <li>Food test specimens appear <strong>almost every year</strong> — always prepare them</li>
+    </ul>
+  </div>
+
+  <div class="examiner-secret">
+    <h3>🎯 Examiner Pattern: What Repeats Every Year</h3>
+    <p><strong>Near-certain topics:</strong> Seeds (monocot vs dicot), Fish adaptive features, Food tests (starch/protein/fat), Ecological relationships (parasitism/mutualism), Reproductive structures (flower/fruit), Insect external features, Alimentary canal/digestive organs.</p><br>
+    <p><strong>Marking scheme rules:</strong> Each correct point = 1 mark. No half marks. No marks for repeated points. The FIRST acceptable answer earns the mark — write your best answer first.</p>
+  </div>
+
+  <div class="info-block">
+    <h3>Mark Allocation Pattern (80-mark paper)</h3>
+    <table class="waec">
+      <tr><th>Question Type</th><th>Typical Marks</th><th>Notes</th></tr>
+      <tr><td>Specimen identification</td><td>1–2 marks</td><td>Accept common OR scientific name</td></tr>
+      <tr><td>Observable features (×3)</td><td>3 marks</td><td>One mark per valid observable point</td></tr>
+      <tr><td>Functions/Uses (×2)</td><td>2 marks</td><td>Must be specific, not vague</td></tr>
+      <tr><td>Comparison table (×3 differences)</td><td>3–6 marks</td><td>–1 mark if not tabulated</td></tr>
+      <tr><td>Classification</td><td>2–4 marks</td><td>Phylum + Class usually required</td></tr>
+      <tr><td>Biological drawing + labels</td><td>6–10 marks</td><td>Title, labels, magnification required</td></tr>
+      <tr><td>Adaptation features</td><td>2–4 marks</td><td>Feature + how it helps = full mark</td></tr>
+      <tr><td>Economic importance</td><td>2–3 marks</td><td>State importance clearly</td></tr>
+      <tr><td>Ecological relationship</td><td>1–2 marks</td><td>Name the relationship + organisms</td></tr>
+      <tr><td>Food test (reagent + result)</td><td>2–4 marks</td><td>Reagent AND expected result needed</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- SPECIMENS -->
+<section class="panel" id="panel-specimens">
+  <div class="section-title"><span>Your Uploaded Set</span>All 16 Specimens — Click to Study Each</div>
+
+  <div class="specimen-grid" id="specGrid">
+    <!-- Cards generated by JS -->
+  </div>
+
+  <!-- DETAIL VIEWS -->
+  <div id="specDetail"></div>
+</section>
+
+<!-- QUESTIONS BANK -->
+<section class="panel" id="panel-questions">
+  <div class="section-title"><span>WAEC Pattern</span>Biology Practical Questions Bank — All Specimens</div>
+
+  <div class="tip-box"><strong>Examiner tip:</strong> Every question below follows the real WAEC format. The answer shown is the <em>marking scheme answer</em> — write this exact style in the exam to earn full marks.</div>
+
+  <div id="qbank"></div>
+</section>
+
+<!-- FOOD TESTS -->
+<section class="panel" id="panel-food-tests">
+  <div class="section-title"><span>Laboratory Practical</span>Food Tests — Complete Guide</div>
+
+  <div class="examiner-secret">
+    <h3>🔬 Why Food Tests Are Almost Guaranteed</h3>
+    <p>Your specimen set contains Groundnut (A/B), Evaporated Milk (H), and Maize (K) — all classic food test specimens. WAEC has tested food tests in over 90% of years. Know every reagent, procedure, and result perfectly.</p>
+  </div>
+
+  <table class="waec">
+    <tr><th>Food Substance</th><th>Reagent Used</th><th>Procedure</th><th>Positive Result</th><th>Your Specimen</th></tr>
+    <tr>
+      <td><strong>Starch</strong></td>
+      <td>Iodine solution (Lugol's)</td>
+      <td>Add 2–3 drops of iodine to the food sample</td>
+      <td>Blue-black coloration</td>
+      <td>Specimen K (Maize grain)</td>
+    </tr>
+    <tr>
+      <td><strong>Reducing Sugars</strong></td>
+      <td>Benedict's reagent</td>
+      <td>Add Benedict's + heat in water bath 5 min</td>
+      <td>Brick-red / orange precipitate</td>
+      <td>Fresh tomato (M)</td>
+    </tr>
+    <tr>
+      <td><strong>Protein</strong></td>
+      <td>Biuret reagent (NaOH + CuSO₄)</td>
+      <td>Add Biuret reagent, observe</td>
+      <td>Violet / purple colour</td>
+      <td>Specimen H (Evaporated milk)</td>
+    </tr>
+    <tr>
+      <td><strong>Fats / Oils (1)</strong></td>
+      <td>Grease spot test</td>
+      <td>Rub food on paper, hold to light</td>
+      <td>Permanent translucent stain</td>
+      <td>Specimen A/B (Groundnut)</td>
+    </tr>
+    <tr>
+      <td><strong>Fats / Oils (2)</strong></td>
+      <td>Ethanol emulsion test</td>
+      <td>Dissolve in ethanol, pour into water</td>
+      <td>Milky white emulsion</td>
+      <td>Specimen A/B (Groundnut)</td>
+    </tr>
+  </table>
+
+  <div class="q-block">
+    <div class="q">Q: State the food test used to detect lipids in Specimen B (crushed groundnut) and state the expected result.</div>
+    <div class="a">
+      <strong>Test:</strong> Grease spot test — rub Specimen B on a piece of white paper and hold to light.<br>
+      <strong>Expected result:</strong> A permanent, translucent (greasy) stain is formed on the paper.<br>
+      <em>Alternative test:</em> Dissolve in ethanol, pour into water — milky white emulsion forms.
+    </div>
+    <div class="marks">[ 2 MARKS — 1 for correct test, 1 for correct result ]</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q">Q: Name the reagent used to test for protein in Specimen H (evaporated milk) and state the expected result.</div>
+    <div class="a">
+      <strong>Reagent:</strong> Biuret reagent (sodium hydroxide solution + copper sulphate solution).<br>
+      <strong>Expected result:</strong> A violet / purple colour appears.
+    </div>
+    <div class="marks">[ 2 MARKS — 1 for reagent, 1 for result ]</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q">Q: State the class of food predominantly stored in Specimen K (maize grain) and name the test and expected result.</div>
+    <div class="a">
+      <strong>Food class:</strong> Carbohydrate (starch).<br>
+      <strong>Test:</strong> Iodine solution test — add 2–3 drops of iodine solution to maize flour or cut surface.<br>
+      <strong>Expected result:</strong> Blue-black coloration.
+    </div>
+    <div class="marks">[ 3 MARKS ]</div>
+  </div>
+</section>
+
+<!-- DRAWING RULES -->
+<section class="panel" id="panel-drawings">
+  <div class="section-title"><span>Examination Technique</span>WAEC Biological Drawing Rules</div>
+
+  <div class="info-block">
+    <h3>The 8 Laws of WAEC Drawing</h3>
+    <ul class="feat">
+      <li><strong>Use 2B pencil only</strong> — never pen or coloured pencil for the diagram itself</li>
+      <li><strong>Draw in the centre</strong> of the allocated space, 6–8 cm long (unless stated otherwise)</li>
+      <li><strong>Single, clean lines</strong> — no sketching, shading, or artistic effects</li>
+      <li><strong>Labels on horizontal lines</strong> drawn with a ruler, pointing to the correct structure with a straight line. Lines must NOT cross each other</li>
+      <li><strong>Title below the diagram</strong> in full — e.g., "Diagram of the External Features of Specimen J (Fish)"</li>
+      <li><strong>State magnification</strong> below the title — e.g., "Magnification: ×1" (actual size) or use the formula: Drawing size ÷ Actual size</li>
+      <li><strong>No freehand label lines</strong> — use a ruler for all leader lines</li>
+      <li><strong>Proportions must be correct</strong> — the drawing must look like the real specimen</li>
+    </ul>
+  </div>
+
+  <div class="examiner-secret">
+    <h3>🖊️ How Examiners Mark Drawings</h3>
+    <p>Typically 6–10 marks for a drawing question. Marks are given for: (1) correct outline/shape, (2) correct proportions, (3) each correct label — usually 1 mark per label, up to 4–6 labels required, (4) title, (5) magnification. You can lose 2–3 marks just from missing the title and magnification — always write them.</p>
+  </div>
+
+  <div class="q-block">
+    <div class="q">Q: Make a drawing 6–8 cm long of Specimen J (fresh fish) and label FOUR external features.</div>
+    <div class="a">
+      <strong>Required labels (any 4):</strong> Dorsal fin, Caudal fin (tail fin), Pectoral fin, Pelvic fin, Anal fin, Scales, Eye, Mouth, Operculum (gill cover), Lateral line.<br><br>
+      <strong>Title:</strong> Diagram of the External Features of Specimen J (Fresh Fish)<br>
+      <strong>Magnification:</strong> ×1 (or measured ratio)
+    </div>
+    <div class="marks">[ 8 MARKS — 2 for drawing quality, 4 for labels (×1 each), 1 title, 1 magnification ]</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q">Q: Make a labelled drawing of Specimen F (Mammalian Alimentary Canal) showing THREE labelled parts.</div>
+    <div class="a">
+      <strong>Required labels (any 3):</strong> Oesophagus, Stomach, Small intestine, Large intestine, Rectum, Anus, Liver, Pancreas.<br>
+      <strong>Title:</strong> Diagram of the Mammalian Alimentary Canal (Specimen F)<br>
+      <strong>Magnification:</strong> ×1 (or reduced as appropriate)
+    </div>
+    <div class="marks">[ 7 MARKS ]</div>
+  </div>
+</section>
+
+<!-- COMPARISONS -->
+<section class="panel" id="panel-comparisons">
+  <div class="section-title"><span>Tabulation Required</span>All WAEC Comparison Tables</div>
+
+  <div class="tip-box"><strong>Rule:</strong> WAEC imposes –1 mark for writing comparisons in prose. ALWAYS use a table. Write the feature being compared in each row.</div>
+
+  <div class="info-block">
+    <h3>Groundnut Pod (A) vs Maize Grain (K)</h3>
+    <table class="waec">
+      <tr><th>#</th><th>Feature</th><th>Groundnut (A)</th><th>Maize Grain (K)</th></tr>
+      <tr><td>1</td><td>Cotyledon type</td><td>Dicotyledonous (2 cotyledons)</td><td>Monocotyledonous (1 cotyledon)</td></tr>
+      <tr><td>2</td><td>Food reserve</td><td>Rich in lipid (oil/fat)</td><td>Rich in carbohydrate (starch)</td></tr>
+      <tr><td>3</td><td>Seed coat</td><td>Enclosed in a pod (legume fruit)</td><td>Not enclosed — a caryopsis fruit</td></tr>
+      <tr><td>4</td><td>Leaf venation</td><td>Reticulate (netted) venation</td><td>Parallel venation</td></tr>
+      <tr><td>5</td><td>Root type (parent plant)</td><td>Taproot system</td><td>Fibrous root system</td></tr>
+      <tr><td>6</td><td>Fruit type</td><td>Pod (legume)</td><td>Grain (caryopsis)</td></tr>
+    </table>
+  </div>
+
+  <div class="info-block green">
+    <h3>Fresh Tomato (M) vs Rotten Tomato (N)</h3>
+    <table class="waec">
+      <tr><th>#</th><th>Feature</th><th>Fresh Tomato (M)</th><th>Rotten Tomato (N)</th></tr>
+      <tr><td>1</td><td>Texture / Firmness</td><td>Firm and turgid</td><td>Soft and watery</td></tr>
+      <tr><td>2</td><td>Smell</td><td>Pleasant/fresh smell</td><td>Offensive/foul smell</td></tr>
+      <tr><td>3</td><td>Colour</td><td>Bright red</td><td>Dull, discoloured (brown/black patches)</td></tr>
+      <tr><td>4</td><td>Edibility</td><td>Edible and safe</td><td>Not edible — unsafe</td></tr>
+      <tr><td>5</td><td>Microorganism presence</td><td>Absent / minimal</td><td>Fungi and bacteria present</td></tr>
+      <tr><td>6</td><td>Skin condition</td><td>Smooth, intact skin</td><td>Broken, shrivelled skin</td></tr>
+    </table>
+  </div>
+
+  <div class="info-block gold">
+    <h3>Water (C) vs Salt Solution (D) — Effect on Plant Cells</h3>
+    <table class="waec">
+      <tr><th>#</th><th>Feature</th><th>Water (C)</th><th>Salt Solution (D)</th></tr>
+      <tr><td>1</td><td>Effect on cell</td><td>Cell becomes turgid</td><td>Cell becomes plasmolysed (flaccid)</td></tr>
+      <tr><td>2</td><td>Direction of osmosis</td><td>Water enters the cell</td><td>Water leaves the cell</td></tr>
+      <tr><td>3</td><td>Concentration</td><td>Hypotonic to cell sap</td><td>Hypertonic to cell sap</td></tr>
+      <tr><td>4</td><td>Effect on plant</td><td>Plant becomes erect / wilting reversed</td><td>Plant wilts / loses rigidity</td></tr>
+    </table>
+  </div>
+
+  <div class="info-block blue">
+    <h3>Mechanical Digestion vs Chemical Digestion</h3>
+    <table class="waec">
+      <tr><th>#</th><th>Feature</th><th>Mechanical Digestion</th><th>Chemical Digestion</th></tr>
+      <tr><td>1</td><td>Process type</td><td>Physical breakdown of food</td><td>Enzymatic/chemical breakdown</td></tr>
+      <tr><td>2</td><td>Enzymes involved</td><td>No enzymes involved</td><td>Enzymes (e.g. pepsin, amylase) involved</td></tr>
+      <tr><td>3</td><td>Location</td><td>Mouth (teeth/tongue) and stomach (churning)</td><td>Mouth, stomach, small intestine</td></tr>
+      <tr><td>4</td><td>Products</td><td>Smaller food particles, not absorbed</td><td>Soluble molecules — absorbable</td></tr>
+    </table>
+  </div>
+
+  <div class="info-block">
+    <h3>Thermometer (P) vs Metre Rule (Q) vs Quadrat (R)</h3>
+    <table class="waec">
+      <tr><th>#</th><th>Instrument</th><th>What It Measures</th><th>Ecological Use</th></tr>
+      <tr><td>1</td><td>Thermometer (P)</td><td>Temperature (°C)</td><td>Measures temperature as an abiotic factor in an ecosystem</td></tr>
+      <tr><td>2</td><td>Metre Rule (Q)</td><td>Linear distance (cm/m)</td><td>Measuring plot sizes, heights of plants, transect lengths</td></tr>
+      <tr><td>3</td><td>Quadrat (R)</td><td>Population density/distribution</td><td>Estimating number/frequency of organisms in a habitat</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- MISTAKES -->
+<section class="panel" id="panel-mistakes">
+  <div class="section-title"><span>Mark Defence</span>Common Mistakes That Lose Marks</div>
+
+  <div class="waec-formula">
+    <div class="formula-card">
+      <h4>❌ Prose Comparison</h4>
+      <p>Writing "Groundnut has 2 cotyledons while maize has 1" in a paragraph instead of a table. Costs –1 mark automatically.</p>
+    </div>
+    <div class="formula-card">
+      <h4>❌ No Magnification</h4>
+      <p>Forgetting to write "Magnification: ×1" under your drawing. Costs 1 mark every time.</p>
+    </div>
+    <div class="formula-card">
+      <h4>❌ No Drawing Title</h4>
+      <p>Not writing the full title under the diagram. "Diagram of Fish" is wrong. Must include Specimen letter and full name.</p>
+    </div>
+    <div class="formula-card">
+      <h4>❌ Vague Features</h4>
+      <p>"It has a body" / "It is found in water" — these earn 0 marks. Features must be specific and observable.</p>
+    </div>
+    <div class="formula-card">
+      <h4>❌ Wrong Reagent Name</h4>
+      <p>Saying "iodine" for protein test instead of "Biuret reagent." One wrong reagent = 0 marks for the whole food test.</p>
+    </div>
+    <div class="formula-card">
+      <h4>❌ Crossing Label Lines</h4>
+      <p>Drawing labels that cross each other on a diagram. This costs you labelling marks. Plan label positions before drawing.</p>
+    </div>
+    <div class="formula-card">
+      <h4>❌ Wrong Cotyledon</h4>
+      <p>Calling maize "dicotyledonous" or groundnut "monocotyledonous." This is a major error — always confirmed by leaf venation too.</p>
+    </div>
+    <div class="formula-card">
+      <h4>❌ Incomplete Adaptations</h4>
+      <p>Saying "fish has fins" without explaining how: "Fins enable movement and steering through water." Feature + function = full mark.</p>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>Golden Rule for Observable Features:</strong> Only write what you can SEE, FEEL, or SMELL with the specimen in front of you. Do not write information from memory if you cannot observe it directly (e.g., don't write "contains vitamin C" for tomato — you cannot observe this).
+  </div>
+</section>
+
+<!-- MNEMONICS -->
+<section class="panel" id="panel-mnemonics">
+  <div class="section-title"><span>Memory Mastery</span>Mnemonics and Rapid Recall</div>
+
+  <div class="mnemonic">
+    <h4>Mnemonic</h4>
+    <div class="word">DISCO FACTS</div>
+    <p style="margin-top:0.5rem; font-size:0.88rem;">The 10 things WAEC always asks about any specimen:<br>
+    <strong>D</strong>escription (observable features) · <strong>I</strong>dentification (name/classification) · <strong>S</strong>tructures and functions · <strong>C</strong>omparison (tabulate!) · <strong>O</strong>riginal habitat (where it lives) · <strong>F</strong>ood class / food test · <strong>A</strong>daptations (feature + function) · <strong>C</strong>otyledon type (for seeds) · <strong>T</strong>ype of relationship (ecology) · <strong>S</strong>ignificance (economic importance)</p>
+  </div>
+
+  <div class="mnemonic">
+    <h4>Food Tests Mnemonic</h4>
+    <div class="word">I BEG</div>
+    <p style="margin-top:0.5rem; font-size:0.88rem;">
+    <strong>I</strong>odine → Starch → Blue-black<br>
+    <strong>B</strong>iuret → Protein → Purple/violet<br>
+    <strong>E</strong>thanol emulsion → Fat → Milky white<br>
+    <strong>G</strong>rease spot → Fat → Translucent stain</p>
+  </div>
+
+  <div class="mnemonic">
+    <h4>Fish Adaptations (Specimen J)</h4>
+    <div class="word">STOGL</div>
+    <p style="margin-top:0.5rem; font-size:0.88rem;">
+    <strong>S</strong>treamlined body — reduces water resistance<br>
+    <strong>T</strong>ail (caudal) fin — propulsion<br>
+    <strong>O</strong>perculum — protects gills<br>
+    <strong>G</strong>ills — gaseous exchange in water<br>
+    <strong>L</strong>ateral line — detects vibrations</p>
+  </div>
+
+  <div class="mnemonic">
+    <h4>Alimentary Canal Order (Specimen F)</h4>
+    <div class="word">MOSS-RI-AC</div>
+    <p style="margin-top:0.5rem; font-size:0.88rem;">
+    <strong>M</strong>outh → <strong>O</strong>esophagus → <strong>S</strong>tomach → <strong>S</strong>mall intestine → <strong>R</strong>ectum → <strong>I</strong>ntestine (large) → <strong>A</strong>nus — <strong>C</strong>omplete!</p>
+  </div>
+
+  <div class="mnemonic">
+    <h4>Dicot vs Monocot Quick Check</h4>
+    <div class="word">2 = DICOT · 1 = MONOCOT</div>
+    <p style="margin-top:0.5rem; font-size:0.88rem;">
+    2 cotyledons = Dicot (groundnut, bean, tomato)<br>
+    1 cotyledon = Monocot (maize, grasses)<br>
+    Dicots: NET venation, TAPROOT, BROAD leaves<br>
+    Monocots: PARALLEL venation, FIBROUS root, NARROW leaves</p>
+  </div>
+
+  <div class="mnemonic">
+    <h4>Ecological Instruments (P, Q, R)</h4>
+    <div class="word">TML — Q</div>
+    <p style="margin-top:0.5rem; font-size:0.88rem;">
+    <strong>T</strong>hermometer (P) = Temperature<br>
+    <strong>M</strong>etre rule (Q) = Measurement of distance<br>
+    <strong>Q</strong>uadrat (R) = Quadrat counts population<br>
+    <em>(R comes after Q — quadrat is for counting!)</em></p>
+  </div>
+</section>
+
+</main>
+
+<footer>WAEC Biology Practical Master Guide · Built from Your Specimen Set · A1 Preparation</footer>
+
+<script>
+const specimens = [
+  {
+    id:'A', name:'Groundnut Pods', cat:'Fruit/Seed',
+    sci:'Arachis hypogaea', phylum:'Angiospermophyta', cls:'Dicotyledonae',
+    desc:'Brown, dry, fibrous pod containing 1–3 seeds. Rough, net-like surface texture. Oval/elongated shape.',
+    features:['Brown/buff coloured','Dry, fibrous outer pod wall','Rough, ridged surface texture','Contains 1–3 seeds (nuts)','Constricted between seeds','Pointed end visible'],
+    functions:[['Pod wall (pericarp)','Protects the seeds from damage, desiccation, and pest entry'],['Seed (nut)','Contains food reserve (oil) for germination; source of nutrition'],['Seed coat (testa)','Protects the embryo from mechanical injury and infection']],
+    adaptations:['Oil-rich seeds: provides concentrated energy store for seedling germination','Hard pod: protects seeds underground from soil organisms','Geocarpy (fruits develop underground): reduces seed dispersal loss, protects from herbivores'],
+    econ:['Major source of cooking/groundnut oil','Important protein and fat source in human diet','Groundnut cake used as livestock feed','Exported — major cash crop for Nigeria, Senegal','Groundnut oil used in soap and lubricant manufacturing'],
+    questions:[
+      {q:'Identify Specimen A.', a:'Groundnut pod / Arachis hypogaea', m:'1 mark'},
+      {q:'State THREE observable features of Specimen A.', a:'1. Brown/buff coloured pod  2. Dry, fibrous texture  3. Rough, ridged surface  4. Contains seeds visible through pod  5. Constricted between seed positions', m:'3 marks (1 per point, any 3)'},
+      {q:'State the class of food predominantly stored in Specimen A.', a:'Lipid (oil / fat)', m:'1 mark'},
+      {q:'Name the cotyledon type in Specimen A.', a:'Dicotyledonous (two cotyledons)', m:'1 mark'},
+      {q:'State TWO economic importances of Specimen A.', a:'1. Source of cooking oil  2. Source of protein/food for humans  3. Used as livestock feed  4. Used in soap manufacturing', m:'2 marks'},
+    ]
+  },
+  {
+    id:'B', name:'Crushed Roasted Groundnut', cat:'Food Sample',
+    sci:'—', phylum:'—', cls:'—',
+    desc:'Ground/powdered, oily, brownish-yellow sample with nutty aroma. Greasy to the touch.',
+    features:['Powdery/granular texture','Brownish-yellow colour','Strong nutty aroma','Greasy/oily feel','Small particle size'],
+    functions:[['Lipid content','Provides energy when consumed; used to test for fats'],['Protein content','Provides amino acids for body building'],['Carbohydrate','Minor energy source']],
+    adaptations:['N/A — processed food sample'],
+    econ:['Consumed directly as food (groundnut paste/peanut butter)','Base ingredient for groundnut soup','Used in confectionery'],
+    questions:[
+      {q:'State the food test used to detect lipids in Specimen B and give the expected result.', a:'Test: Grease spot test — rub on white paper, hold to light. OR Ethanol emulsion test — dissolve in ethanol, pour into water.\nResult: Permanent, translucent greasy stain forms. OR Milky-white emulsion forms.', m:'2 marks'},
+      {q:'Name the class of food substance in Specimen B.', a:'Lipid (fat/oil)', m:'1 mark'},
+    ]
+  },
+  {
+    id:'C', name:'Water', cat:'Abiotic Factor',
+    sci:'H₂O', phylum:'—', cls:'—',
+    desc:'Colourless, odourless liquid. An important abiotic (non-living) environmental factor.',
+    features:['Colourless','Odourless','Liquid at room temperature','No taste (pure water)'],
+    functions:[['Solvent','Dissolves minerals for absorption by plant roots'],['Medium for osmosis','Enters plant cells by osmosis, maintaining turgidity'],['Photosynthesis substrate','Raw material for photosynthesis in plants'],['Temperature regulation','Regulates body temperature through sweating/transpiration']],
+    adaptations:['N/A — abiotic factor'],
+    econ:['Essential for all living organisms','Required for agriculture/irrigation','Used in industrial processes','Habitat for aquatic organisms'],
+    questions:[
+      {q:'Classify Specimen C.', a:'Specimen C is an abiotic (non-living) factor', m:'1 mark'},
+      {q:'State the effect of Specimen C on plant cells (in terms of osmosis).', a:'Water enters the plant cells by osmosis (since water has a higher water potential than cell sap in concentrated conditions), causing the cells to become turgid.', m:'2 marks'},
+      {q:'Distinguish between the effect of Specimen C (water) and Specimen D (salt solution) on plant cells.', a:'See Comparisons Table — tabulate differences.', m:'4 marks — must be tabulated'},
+    ]
+  },
+  {
+    id:'D', name:'Salt Solution', cat:'Abiotic Factor',
+    sci:'NaCl (aq)', phylum:'—', cls:'—',
+    desc:'Clear, colourless liquid with a salty taste. Hypertonic solution that causes plasmolysis in plant cells.',
+    features:['Colourless / clear liquid','Salty taste','Liquid at room temperature','Denser than pure water (dissolved solids)'],
+    functions:[['Osmotic agent','Creates hypertonic environment, drawing water out of plant cells'],['Preservative','Inhibits microbial growth, used to preserve food']],
+    adaptations:['N/A — abiotic/chemical factor'],
+    econ:['Used in food preservation','Industrial chemical (NaCl)','Used in laboratory practical experiments (osmosis)'],
+    questions:[
+      {q:'State the effect of Specimen D (salt solution) on plant cells.', a:'Salt solution draws water out of plant cells by osmosis (since it has a lower water potential than the cell sap), causing the cells to become plasmolysed / flaccid / the plant wilts.', m:'2 marks'},
+      {q:'Name the biological process occurring when plant cells are placed in Specimen D.', a:'Osmosis / Plasmolysis', m:'1 mark'},
+    ]
+  },
+  {
+    id:'E', name:'Sandy Soil', cat:'Abiotic Factor',
+    sci:'—', phylum:'—', cls:'—',
+    desc:'Coarse, gritty, light-coloured soil with large particles. Drains water quickly, poor in nutrients.',
+    features:['Coarse, gritty texture','Light colour (yellowish/white/grey)','Large particle size','Loose, does not clump when wet','Drains water quickly'],
+    functions:[['Large air spaces','Allows good aeration around roots'],['Drainage medium','Does not waterlog — useful for cacti/desert plants'],['Root anchorage','Provides support for plant roots']],
+    adaptations:['Plants in sandy soil (xerophytes) have deep roots to reach water and small leaves to reduce water loss'],
+    econ:['Used in construction (concrete, mortar)','Used in drainage systems','Some crops (e.g. cassava, groundnut) grow well in sandy-loam soil'],
+    questions:[
+      {q:'Classify Specimen E.', a:'Sandy soil is an abiotic (non-living) factor / component of the physical environment.', m:'1 mark'},
+      {q:'State TWO properties of Specimen E (sandy soil).', a:'1. Has large/coarse particles  2. Drains water quickly / has low water retention  3. Low in humus/nutrients  4. Has large air spaces  5. Light in colour', m:'2 marks'},
+      {q:'State ONE disadvantage of sandy soil for plant growth.', a:'Sandy soil has low water-holding capacity and is poor in mineral nutrients / humus, making it unable to support most crop plants adequately.', m:'1 mark'},
+    ]
+  },
+  {
+    id:'F', name:'Alimentary Canal (Mammal)', cat:'Animal Organ System',
+    sci:'—', phylum:'Chordata', cls:'Mammalia',
+    desc:'Complete digestive tract from oesophagus to anus. Includes stomach, small and large intestine. Coiled tube-like structure.',
+    features:['Coiled/tube-like structure','Varying diameter along its length','Stomach: sac-like, wider section','Small intestine: long, narrow, coiled','Large intestine: shorter, wider','Muscular walls throughout'],
+    functions:[['Oesophagus','Passes food from mouth to stomach by peristalsis'],['Stomach','Temporary storage; begins protein digestion (pepsin, rennin, HCl)'],['Small intestine','Main site of digestion (enzymes) and absorption of nutrients'],['Large intestine','Absorbs water; forms and stores faeces'],['Rectum/Anus','Stores and expels faeces from body']],
+    adaptations:['Long small intestine: increases surface area for absorption','Villi and microvilli: further increase absorption surface area','Muscular walls: enable peristaltic movement of food','Gastric glands: secrete enzymes and HCl for digestion'],
+    econ:['Understanding digestion underlies nutrition science and medicine','Diseases of the alimentary canal (ulcers, IBD) are major medical conditions'],
+    questions:[
+      {q:'Identify Specimen F.', a:'Mammalian alimentary canal / digestive tract', m:'1 mark'},
+      {q:'Name the organ through which food first enters Specimen F (from the mouth).', a:'Oesophagus (gullet)', m:'1 mark'},
+      {q:'State TWO digestive enzymes active in the stomach.', a:'1. Pepsin (digests proteins)  2. Rennin (coagulates milk protein in young mammals)', m:'2 marks'},
+      {q:'State TWO observable features of the stomach.', a:'1. Sac-like / bag-shaped structure  2. Muscular walls  3. Wider than oesophagus  4. Connects to small intestine via pyloric sphincter', m:'2 marks'},
+      {q:'State TWO adaptations of the stomach for digestion.', a:'1. Thick muscular walls — enable churning / mechanical digestion  2. Presence of gastric glands — secrete digestive enzymes (pepsin) and hydrochloric acid', m:'2 marks'},
+    ]
+  },
+  {
+    id:'G', name:'Mistletoe on Host Plant', cat:'Parasitism',
+    sci:'Loranthus sp.', phylum:'Angiospermophyta', cls:'Dicotyledonae',
+    desc:'Parasitic flowering plant growing on branches of a host tree. Has green leaves (hemiparasite — can photosynthesise) but derives water and minerals from host via haustoria.',
+    features:['Green, leathery leaves on host branch','Attached firmly to host tree branch','Stem penetrates host bark','Visible attachment/swelling on host branch','Produces small flowers/berries (if present)'],
+    functions:[['Haustoria (modified roots)','Penetrate host vascular tissue (xylem) to absorb water and mineral salts'],['Green leaves','Perform photosynthesis (unlike holoparasites)'],['Sticky berries','Dispersed by birds (zoochory) — spread to new hosts']],
+    adaptations:['Haustoria: specialised absorptive organs to tap into host xylem','Sticky seeds: adhere to bird beaks/feet for dispersal to new hosts','Green leaves: allows partial self-feeding (reduces complete dependence on host)','Firm attachment: resists being dislodged from host branch'],
+    econ:['Harmful: weakens host trees, causes poor growth, may kill host','Reduces yield of host crop trees (mango, citrus, etc.)','Used in traditional medicine in some cultures','Mistletoe extract studied for anti-tumour properties'],
+    questions:[
+      {q:'Identify the ecological relationship represented by Specimen G.', a:'Parasitism', m:'1 mark'},
+      {q:'Name the parasite and host in Specimen G.', a:'Parasite: Mistletoe (Loranthus sp.)  Host: The tree/plant on which it grows', m:'2 marks'},
+      {q:'State TWO harmful effects of the parasite on the host plant.', a:'1. Reduces the amount of water and minerals available to host  2. Causes stunted/poor growth of the host  3. May eventually kill the host plant', m:'2 marks'},
+      {q:'State TWO adaptive features of the mistletoe for survival as a parasite.', a:'1. Haustoria — modified roots that penetrate host tissue to absorb water and minerals  2. Sticky seeds — dispersed by birds to new host plants', m:'2 marks (feature alone = ½ mark; feature + how it helps = full mark)'},
+    ]
+  },
+  {
+    id:'H', name:'Evaporated Milk', cat:'Food Sample',
+    sci:'—', phylum:'—', cls:'—',
+    desc:'Concentrated, creamy-white liquid with slightly sweet smell. Rich in protein, fat, and calcium.',
+    features:['Creamy white colour','Thick, viscous liquid','Sweet/milky odour','Smooth texture','Higher density than water'],
+    functions:[['Protein (casein, whey)','Provides amino acids for body-building and repair'],['Fat','Source of energy; fat-soluble vitamins A, D'],['Calcium/minerals','Bone and teeth formation']],
+    adaptations:['N/A — processed food product'],
+    econ:['Important nutritional food for infants and adults','Used in cooking, confectionery','Source of income for dairy farmers'],
+    questions:[
+      {q:'Name ONE food substance present in Specimen H (evaporated milk).', a:'Protein (casein/whey)  OR  Fat  OR  Calcium  OR  Carbohydrate (lactose)', m:'1 mark'},
+      {q:'Name the reagent used to test for protein in Specimen H and state the expected result.', a:'Reagent: Biuret reagent (NaOH + CuSO₄)  Result: Violet / purple colour appears', m:'2 marks'},
+    ]
+  },
+  {
+    id:'J', name:'Fresh Fish', cat:'Vertebrate',
+    sci:'Varies (e.g. Tilapia sp.)', phylum:'Chordata', cls:'Osteichthyes (Actinopterygii)',
+    desc:'Streamlined, scaly vertebrate with fins and gills. Cold-blooded aquatic animal. Lateral line visible along sides.',
+    features:['Streamlined (fusiform) body shape','Covered with overlapping scales','Visible fins: dorsal, caudal, pectoral, pelvic, anal','Eyes present — no eyelids','Operculum (gill cover) on each side','Lateral line visible along body sides','Mouth at anterior end','Slimy/mucus-covered surface'],
+    functions:[['Scales','Protection from injury and reduction of friction in water'],['Fins (caudal)','Propulsion — drives fish forward through water'],['Fins (pectoral/pelvic)','Steering, balance, and braking'],['Gills','Gaseous exchange — absorbs O₂ from water, releases CO₂'],['Operculum','Protects the gills'],['Streamlined body','Reduces water resistance during swimming'],['Lateral line','Detects vibrations and pressure changes in water'],['Mucus/slime','Further reduces friction in water']],
+    adaptations:['Streamlined body — reduces drag/water resistance during swimming','Scales with mucus — reduce friction in water','Gills — extract dissolved oxygen from water for respiration','Fins — provide movement, steering and stability','Lateral line system — detects water currents and obstacles','Swim bladder — controls buoyancy at different depths','Cold-blooded (ectothermic) — conserves energy by not regulating body temperature'],
+    econ:['Major source of animal protein for millions of people','Supports commercial and artisanal fishing industries','Source of fish oil (Omega-3 fatty acids)','Provides employment in fishing communities','Used as livestock feed (fishmeal)'],
+    questions:[
+      {q:'Identify Specimen J and state its habitat.', a:'Fresh fish (e.g. Tilapia)  Habitat: Aquatic (freshwater/marine)', m:'2 marks'},
+      {q:'State the respiratory organ of Specimen J.', a:'Gills', m:'1 mark'},
+      {q:'State THREE observable external features of Specimen J.', a:'1. Scales covering the body  2. Fins (dorsal/caudal/pectoral etc.)  3. Operculum (gill cover)  4. Streamlined body  5. Lateral line  6. Eyes without eyelids', m:'3 marks'},
+      {q:'State TWO functions of the caudal fin.', a:'1. Propulsion — provides the main driving force for forward movement  2. Steering — helps to change direction during swimming', m:'2 marks'},
+      {q:'State THREE adaptive features of Specimen J for aquatic life.', a:'1. Streamlined body — reduces water resistance  2. Gills — for gaseous exchange in water  3. Fins — for movement and steering  4. Scales with mucus — reduce friction  5. Lateral line — detects vibrations in water', m:'3 marks (feature alone = ½; feature + function = 1 mark)'},
+    ]
+  },
+  {
+    id:'K', name:'Dry Maize Grain', cat:'Seed',
+    sci:'Zea mays', phylum:'Angiospermophyta', cls:'Monocotyledonae',
+    desc:'Hard, dry, yellowish grain with a flat-topped appearance. A caryopsis (true grain) fruit. Contains one cotyledon (endosperm rich in starch).',
+    features:['Yellow/cream coloured','Hard and dry texture','Flat-topped with a depression (hilum/embryo)','Small, compact grain','Single cotyledon visible when cut','Pointed base'],
+    functions:[['Endosperm','Stores starch as food reserve for germinating embryo'],['Embryo','Develops into new plant during germination'],['Testa (seed coat/pericarp fused)','Protects the grain from physical damage and infection'],['Cotyledon (scutellum)','Transfers food from endosperm to growing embryo']],
+    adaptations:['Hard, dry seed coat: protects embryo during storage and dormancy','High starch content: provides energy for germination','Small size: allows wind and animal dispersal'],
+    econ:['Staple food crop worldwide (ugali, corn flour, cornstarch)','Livestock feed and poultry feed','Industrial starch production','Production of corn syrup, bio-ethanol','Maize bran used as fodder'],
+    questions:[
+      {q:'Identify Specimen K.', a:'Dry maize grain / Zea mays', m:'1 mark'},
+      {q:'State the class of food predominantly stored in Specimen K.', a:'Carbohydrate (starch)', m:'1 mark'},
+      {q:'Name the cotyledon type in Specimen K.', a:'Monocotyledonous (one cotyledon)', m:'1 mark'},
+      {q:'State THREE observable features of Specimen K.', a:'1. Yellow/cream coloured  2. Hard and dry texture  3. Small/compact grain  4. Flat top with hilum depression  5. Pointed base', m:'3 marks'},
+    ]
+  },
+  {
+    id:'L', name:'Tomato Paste', cat:'Processed Food',
+    sci:'—', phylum:'—', cls:'—',
+    desc:'Thick, red, smooth paste derived from processed tomatoes. Concentrated product.',
+    features:['Deep red colour','Thick, paste-like texture','Tomato aroma','Smooth consistency','Concentrated form of tomato'],
+    functions:[['Lycopene (pigment)','Antioxidant; responsible for red colour'],['Vitamins A, C','Nutritional value'],['Flavour compounds','Enhances taste in cooking']],
+    adaptations:['N/A — processed food product'],
+    econ:['Widely used in cooking across West Africa','Commercial processing provides jobs','Long shelf-life compared to fresh tomato'],
+    questions:[
+      {q:'State TWO differences between Specimen L (tomato paste) and Specimen M (fresh tomato).', a:'Tabulate: 1. L is processed / M is fresh  2. L has thick paste texture / M is firm-fleshed fruit  3. L is more concentrated / M has high water content  4. L has long shelf-life / M perishes quickly', m:'2 marks — must be tabulated'},
+      {q:'State ONE food substance present in Specimen L.', a:'Lycopene (carotenoid pigment)  OR  Vitamin A  OR  Vitamin C  OR  Carbohydrate', m:'1 mark'},
+    ]
+  },
+  {
+    id:'M', name:'Fresh Tomato Fruit', cat:'Fruit',
+    sci:'Solanum lycopersicum', phylum:'Angiospermophyta', cls:'Dicotyledonae',
+    desc:'Bright red, fleshy, round berry. Soft skin with juicy interior. Contains seeds embedded in gel. True berry fruit.',
+    features:['Bright red colour','Smooth, shiny surface','Spherical / round shape','Firm yet slightly soft flesh','Contains seeds visible when cut','Green sepals (calyx) at base','Juicy interior with gel-like seed chambers'],
+    functions:[['Pericarp (flesh)','Protects seeds; attracts animals for dispersal'],['Seeds','Contain embryo for reproduction'],['Red pigment (lycopene)','Attracts animals for seed dispersal'],['Calyx (green sepals)','Photosynthesis; protected fruit during development']],
+    adaptations:['Red colour: attracts animals and birds for seed dispersal','Fleshy, nutrient-rich pericarp: rewards dispersers','Many seeds: ensures at least some seeds survive and germinate'],
+    econ:['Important food/vegetable in cooking (soups, stews, sauces)','Source of vitamins A, C, and lycopene (antioxidant)','Major cash crop — supports livelihoods','Raw material for tomato paste, ketchup, juice industries'],
+    questions:[
+      {q:'Identify Specimen M.', a:'Fresh tomato fruit / Solanum lycopersicum', m:'1 mark'},
+      {q:'State THREE observable features of Specimen M.', a:'1. Bright red colour  2. Smooth, shiny surface  3. Round/spherical shape  4. Firm, fleshy texture  5. Green calyx (sepals) at base', m:'3 marks'},
+      {q:'State TWO economic importances of Specimen M.', a:'1. Used as food (in soups/stews/salads)  2. Source of vitamins A and C  3. Cash crop for farmers  4. Raw material for tomato paste/juice industry', m:'2 marks'},
+    ]
+  },
+  {
+    id:'N', name:'Rotten Tomato Fruit', cat:'Decomposing Fruit',
+    sci:'—', phylum:'—', cls:'—',
+    desc:'Decomposed tomato showing microbial breakdown. Soft, discoloured, foul-smelling. Evidence of fungal and/or bacterial action.',
+    features:['Soft, mushy texture','Discoloured — brown, black, or grey patches','Offensive / foul odour','Shrivelled/collapsed structure','May show visible fungal mycelium (white/grey growth)','Leaking juices'],
+    functions:[['Decomposition microbes','Break down organic matter, returning nutrients to soil — ecological importance'],],
+    adaptations:['N/A — decomposing specimen'],
+    econ:['Harmful: causes economic loss to farmers and traders','Causes food poisoning if consumed','Decomposition returns minerals to soil (beneficial to ecosystem)'],
+    questions:[
+      {q:'Identify Specimen N and name the biological process responsible for its condition.', a:'Specimen N: Rotten tomato fruit  Process: Decomposition / putrefaction', m:'2 marks'},
+      {q:'Name TWO organisms responsible for the condition observed in Specimen N.', a:'1. Fungi (moulds)  2. Bacteria', m:'2 marks'},
+      {q:'State THREE conditions that favour the development observed in Specimen N.', a:'1. Presence of moisture  2. Warm temperature  3. Presence of microorganisms (fungi/bacteria)  4. Availability of oxygen (aerobic decomposition)', m:'3 marks'},
+      {q:'State ONE method of preventing the condition observed in Specimen N.', a:'Refrigeration / Cold storage  OR  Dehydration/drying  OR  Canning  OR  Use of preservatives', m:'1 mark'},
+    ]
+  },
+  {
+    id:'P', name:'Thermometer', cat:'Measuring Instrument',
+    sci:'—', phylum:'—', cls:'—',
+    desc:'Glass/digital instrument for measuring temperature. Calibrated in degrees Celsius (°C). Used to measure temperature as an abiotic factor in ecological studies.',
+    features:['Glass/metal tube','Calibrated scale in °C','Bulb at one end (mercury or alcohol bulb)','Narrow bore capillary tube','Scale markings visible'],
+    functions:[['Bulb','Absorbs heat from the environment'],['Capillary tube','Liquid expands through narrow bore, allowing temperature reading'],['Scale','Indicates the measured temperature value']],
+    adaptations:['N/A — measuring instrument'],
+    econ:['Used in ecology to measure temperature abiotic factor','Used in medicine (clinical thermometer)','Used in weather forecasting (meteorology)','Laboratory use in biology/chemistry experiments'],
+    questions:[
+      {q:'Identify Specimen P and state its function.', a:'Thermometer. Function: It is used to measure temperature.', m:'2 marks'},
+      {q:'State the environmental factor measured by Specimen P.', a:'Temperature (an abiotic factor)', m:'1 mark'},
+      {q:'State ONE way temperature (measured by Specimen P) affects organisms in an ecosystem.', a:'Temperature affects the rate of metabolic processes (enzyme activity); extremes of temperature can kill organisms or cause migration/hibernation.', m:'1 mark'},
+    ]
+  },
+  {
+    id:'Q', name:'Metre Rule', cat:'Measuring Instrument',
+    sci:'—', phylum:'—', cls:'—',
+    desc:'Flat, wooden or plastic ruler 100 cm (1 metre) long. Calibrated in centimetres and millimetres. Used to measure linear distance in ecological studies.',
+    features:['Flat, rigid structure','100 cm in length','Calibrated scale (mm and cm)','Markings/numbers along the length'],
+    functions:[['Scale markings','Allow accurate measurement of lengths, distances, heights'],['Rigid body','Ensures straight, accurate measurement']],
+    adaptations:['N/A — measuring instrument'],
+    econ:['Used to measure plant heights in growth studies','Used to measure transect lengths in ecological surveys','Used to measure quadrat dimensions','Standard measurement tool in laboratories and field work'],
+    questions:[
+      {q:'Identify Specimen Q and state TWO ecological uses.', a:'Metre rule. Uses: 1. Measuring lengths of transects in ecological surveys  2. Measuring plant heights/growth  3. Measuring dimensions of quadrat plots', m:'3 marks'},
+    ]
+  },
+  {
+    id:'R', name:'Quadrat', cat:'Ecological Instrument',
+    sci:'—', phylum:'—', cls:'—',
+    desc:'Square frame (usually 0.5m × 0.5m or 1m × 1m) made of metal, wood, or string. Used to sample organisms in a defined area of habitat.',
+    features:['Square/rectangular frame','Divided into smaller squares by internal wires/string (grid)','Usually 0.5m × 0.5m or 1m × 1m','Rigid or flexible frame materials'],
+    functions:[['Square frame','Defines a fixed, known sampling area in a habitat'],['Internal grid','Allows estimation of percentage cover of organisms'],['Portability','Can be thrown randomly into habitat for unbiased sampling']],
+    adaptations:['N/A — ecological instrument'],
+    econ:['Essential tool for population ecology studies','Used in conservation to monitor species abundance','Used in agricultural surveys to estimate weed density','Simple, cheap, and reliable for field sampling'],
+    questions:[
+      {q:'Identify Specimen R and state its ecological use.', a:'Quadrat. Use: Used to estimate population density/distribution/frequency of organisms in a given habitat area.', m:'2 marks'},
+      {q:'State TWO advantages of using Specimen R in ecological studies.', a:'1. Simple and easy to use in the field  2. Gives reliable estimates of population density  3. Allows repeatable, standardised sampling  4. Cheap and portable', m:'2 marks'},
+      {q:'Describe how Specimen R is used to estimate the population of a plant in a habitat.', a:'1. Throw the quadrat randomly into the study area several times  2. Count the number of the plant species within each quadrat  3. Calculate the mean number per quadrat  4. Multiply by the total area to estimate total population', m:'4 marks'},
+    ]
+  }
+];
+
+function buildSpecGrid() {
+  const grid = document.getElementById('specGrid');
+  grid.innerHTML = specimens.map(s => `
+    <div class="spec-card" onclick="showSpecDetail('${s.id}')">
+      <div class="label">${s.id}</div>
+      <div class="name">${s.name}</div>
+      <div class="cat">${s.cat}</div>
+    </div>
+  `).join('');
+}
+
+function showSpecDetail(id) {
+  const s = specimens.find(x => x.id === id);
+  if (!s) return;
+  const detail = document.getElementById('specDetail');
+  const grid = document.getElementById('specGrid');
+  grid.style.display = 'none';
+
+  detail.innerHTML = `
+    <button class="back-btn" onclick="backToGrid()">← Back to all specimens</button>
+    <div class="spec-header">
+      <div class="spec-letter">${s.id}</div>
+      <div>
+        <h2>${s.name}</h2>
+        <p>${s.sci !== '—' ? s.sci : s.cat} · ${s.phylum !== '—' ? 'Phylum: ' + s.phylum : ''} ${s.cls !== '—' ? '· Class: ' + s.cls : ''}</p>
+      </div>
+    </div>
+
+    <div class="info-block">
+      <h3>Quick Description</h3>
+      <p>${s.desc}</p>
+    </div>
+
+    <div class="info-block green">
+      <h3>Observable Features (Write These in the Exam)</h3>
+      <ul class="feat">${s.features.map(f => `<li>${f}</li>`).join('')}</ul>
+    </div>
+
+    <div class="info-block">
+      <h3>Structures and Functions</h3>
+      <table class="waec">
+        <tr><th>Structure</th><th>Function</th></tr>
+        ${s.functions.map(f => `<tr><td><strong>${f[0]}</strong></td><td>${f[1]}</td></tr>`).join('')}
+      </table>
+    </div>
+
+    <div class="info-block gold">
+      <h3>Adaptive Features</h3>
+      <ul class="feat">${s.adaptations.map(a => `<li>${a}</li>`).join('')}</ul>
+    </div>
+
+    <div class="info-block blue">
+      <h3>Economic Importance</h3>
+      <ul class="feat">${s.econ.map(e => `<li>${e}</li>`).join('')}</ul>
+    </div>
+
+    <div class="section-title" style="font-size:1rem; margin-top:1.5rem;">WAEC Likely Questions — Specimen ${s.id}</div>
+    ${s.questions.map((q, i) => `
+      <div class="q-block">
+        <div class="q">Q${i+1}. ${q.q}</div>
+        <div class="a"><strong>Model Answer:</strong><br>${q.a.replace(/\n/g,'<br>')}</div>
+        <div class="marks">[ ${q.m} ]</div>
+      </div>
+    `).join('')}
+  `;
+  detail.style.display = 'block';
+}
+
+function backToGrid() {
+  document.getElementById('specGrid').style.display = 'grid';
+  document.getElementById('specDetail').style.display = 'none';
+  document.getElementById('specDetail').innerHTML = '';
+}
+
+function buildQBank() {
+  const container = document.getElementById('qbank');
+  let html = '';
+  specimens.forEach(s => {
+    if (!s.questions.length) return;
+    html += `<div class="section-title" style="font-size:1rem; margin-top:1.5rem;"><span>Specimen ${s.id}</span>${s.name}</div>`;
+    s.questions.forEach((q, i) => {
+      html += `<div class="q-block">
+        <div class="q">Q. ${q.q}</div>
+        <div class="a"><strong>Marking Scheme Answer:</strong><br>${q.a.replace(/\n/g,'<br>')}</div>
+        <div class="marks">[ ${q.m} ]</div>
+      </div>`;
+    });
+  });
+  container.innerHTML = html;
+}
+
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+buildSpecGrid();
+buildQBank();
+</script>
+</body>
+</html>
