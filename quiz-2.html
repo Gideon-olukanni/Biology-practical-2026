@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAEC Biology Practical — Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0e1a;
+  --surface: #131728;
+  --card: #1a1f35;
+  --border: #2a3050;
+  --accent: #4f8ef7;
+  --green: #22c55e;
+  --red: #ef4444;
+  --gold: #f59e0b;
+  --purple: #a855f7;
+  --text: #e8eaf0;
+  --muted: #8892aa;
+  --mono: 'IBM Plex Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+/* ── SCREEN ROUTER ── */
+.screen { display: none; }
+.screen.active { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ══════════════════════════════
+   HOME SCREEN
+══════════════════════════════ */
+#home {
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: radial-gradient(ellipse at 60% 20%, #1a2a5e 0%, var(--bg) 65%);
+}
+.home-inner { max-width: 680px; width: 100%; text-align: center; }
+.logo-mark {
+  width: 64px; height: 64px; border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 1.5rem; font-weight: 700;
+  color: white; margin: 0 auto 1.5rem;
+  box-shadow: 0 0 40px rgba(79,142,247,0.4);
+}
+.home-inner h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 0.6rem;
+}
+.home-inner h1 span { color: var(--accent); }
+.home-inner p { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+.mode-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+.mode-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(79,142,247,0.15); }
+.mode-card.selected { border-color: var(--accent); background: rgba(79,142,247,0.1); }
+.mode-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+.mode-card h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.2rem; }
+.mode-card p { font-size: 0.75rem; color: var(--muted); }
+
+.specimen-picker {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+.specimen-picker h3 {
+  font-family: var(--mono); font-size: 0.7rem; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 0.8rem;
+}
+.spec-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.spec-chip {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 6px; padding: 0.3rem 0.7rem;
+  font-family: var(--mono); font-size: 0.72rem; cursor: pointer;
+  transition: all 0.15s; user-select: none;
+}
+.spec-chip:hover { border-color: var(--accent); }
+.spec-chip.on { background: var(--accent); border-color: var(--accent); color: white; }
+
+.start-btn {
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  color: white; border: none; border-radius: 10px;
+  padding: 1rem 2.5rem; font-size: 1rem; font-weight: 700;
+  cursor: pointer; width: 100%; max-width: 320px;
+  transition: opacity 0.2s; letter-spacing: 0.5px;
+}
+.start-btn:hover { opacity: 0.88; }
+.start-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ══════════════════════════════
+   QUIZ SCREEN
+══════════════════════════════ */
+#quiz { background: var(--bg); }
+
+.quiz-topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0.8rem 1.2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+  position: sticky; top: 0; z-index: 50;
+}
+.quiz-topbar .left { display: flex; align-items: center; gap: 0.8rem; }
+.quit-btn {
+  background: none; border: 1px solid var(--border); color: var(--muted);
+  font-family: var(--mono); font-size: 0.68rem; padding: 0.3rem 0.7rem;
+  border-radius: 6px; cursor: pointer; letter-spacing: 1px;
+}
+.quit-btn:hover { border-color: var(--red); color: var(--red); }
+.progress-wrap { flex: 1; max-width: 300px; }
+.progress-label {
+  font-family: var(--mono); font-size: 0.68rem; color: var(--muted);
+  letter-spacing: 1px; margin-bottom: 0.3rem; display: flex; justify-content: space-between;
+}
+.progress-bar { background: var(--border); border-radius: 99px; height: 6px; overflow: hidden; }
+.progress-fill { background: linear-gradient(90deg, var(--accent), var(--purple)); height: 100%; border-radius: 99px; transition: width 0.4s ease; }
+.score-badge {
+  font-family: var(--mono); font-size: 0.8rem;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.3rem 0.7rem;
+  white-space: nowrap;
+}
+.score-badge .s { color: var(--green); font-weight: 700; }
+.score-badge .f { color: var(--red); font-weight: 700; }
+
+.quiz-body { max-width: 680px; margin: 0 auto; padding: 2rem 1rem 5rem; }
+
+.q-number {
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem;
+}
+.q-specimen-tag {
+  display: inline-block;
+  background: rgba(79,142,247,0.15);
+  border: 1px solid rgba(79,142,247,0.3);
+  border-radius: 6px; padding: 0.2rem 0.6rem;
+  font-family: var(--mono); font-size: 0.68rem; color: var(--accent);
+  margin-bottom: 1rem;
+}
+.q-type-tag {
+  display: inline-block; margin-left: 0.4rem;
+  border-radius: 6px; padding: 0.2rem 0.6rem;
+  font-family: var(--mono); font-size: 0.68rem;
+}
+.q-type-tag.theory { background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); color: var(--purple); }
+.q-type-tag.obj { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); color: var(--gold); }
+
+.q-text {
+  font-size: 1.05rem; font-weight: 600; line-height: 1.5;
+  margin-bottom: 1.4rem; color: var(--text);
+}
+
+/* OBJECTIVE OPTIONS */
+.options-grid { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.2rem; }
+.option-btn {
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 0.85rem 1.1rem;
+  text-align: left; cursor: pointer; transition: all 0.15s;
+  font-size: 0.92rem; color: var(--text); display: flex; align-items: center; gap: 0.8rem;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(79,142,247,0.08); }
+.option-btn.correct { border-color: var(--green); background: rgba(34,197,94,0.1); }
+.option-btn.wrong { border-color: var(--red); background: rgba(239,68,68,0.1); }
+.option-btn.reveal-correct { border-color: var(--green); background: rgba(34,197,94,0.08); }
+.option-btn:disabled { cursor: default; }
+.opt-letter {
+  font-family: var(--mono); font-size: 0.75rem; font-weight: 700;
+  width: 24px; height: 24px; border-radius: 6px;
+  background: var(--border); display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.option-btn.correct .opt-letter { background: var(--green); color: white; }
+.option-btn.wrong .opt-letter { background: var(--red); color: white; }
+.option-btn.reveal-correct .opt-letter { background: var(--green); color: white; }
+
+/* THEORY INPUT */
+.theory-area {
+  width: 100%; background: var(--card); border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 0.9rem 1rem; color: var(--text);
+  font-family: 'Outfit', sans-serif; font-size: 0.93rem; line-height: 1.6;
+  resize: vertical; min-height: 100px; transition: border-color 0.2s;
+  margin-bottom: 0.8rem;
+}
+.theory-area:focus { outline: none; border-color: var(--accent); }
+.theory-area.correct-border { border-color: var(--green); }
+.theory-area.wrong-border { border-color: var(--red); }
+
+.marks-hint {
+  font-family: var(--mono); font-size: 0.68rem; color: var(--muted);
+  letter-spacing: 1px; margin-bottom: 0.8rem;
+}
+
+.action-btn {
+  border: none; border-radius: 8px; padding: 0.75rem 1.8rem;
+  font-size: 0.92rem; font-weight: 700; cursor: pointer;
+  transition: opacity 0.15s; letter-spacing: 0.3px;
+}
+.action-btn.primary { background: var(--accent); color: white; }
+.action-btn.primary:hover { opacity: 0.85; }
+.action-btn.secondary { background: var(--card); color: var(--text); border: 1.5px solid var(--border); }
+.action-btn.secondary:hover { border-color: var(--accent); }
+.btn-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+
+/* FEEDBACK BOX */
+.feedback-box {
+  border-radius: 10px; padding: 1rem 1.2rem; margin-top: 1rem;
+  font-size: 0.9rem; line-height: 1.6;
+  display: none;
+  animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+.feedback-box.correct { background: rgba(34,197,94,0.08); border: 1.5px solid rgba(34,197,94,0.4); }
+.feedback-box.wrong { background: rgba(239,68,68,0.08); border: 1.5px solid rgba(239,68,68,0.4); }
+.feedback-box.partial { background: rgba(245,158,11,0.08); border: 1.5px solid rgba(245,158,11,0.4); }
+.feedback-title { font-weight: 700; margin-bottom: 0.4rem; font-size: 0.95rem; }
+.feedback-box.correct .feedback-title { color: var(--green); }
+.feedback-box.wrong .feedback-title { color: var(--red); }
+.feedback-box.partial .feedback-title { color: var(--gold); }
+.model-answer { margin-top: 0.6rem; }
+.model-answer strong { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.model-answer p { margin-top: 0.3rem; color: var(--text); font-size: 0.88rem; }
+
+.keyword-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
+.kw-chip {
+  font-size: 0.72rem; border-radius: 5px; padding: 0.15rem 0.5rem;
+}
+.kw-chip.hit { background: rgba(34,197,94,0.2); color: var(--green); border: 1px solid rgba(34,197,94,0.4); }
+.kw-chip.miss { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+
+.next-btn-big {
+  width: 100%; background: linear-gradient(135deg, var(--accent), var(--purple));
+  color: white; border: none; border-radius: 10px;
+  padding: 0.9rem; font-size: 1rem; font-weight: 700; cursor: pointer;
+  margin-top: 1.2rem; transition: opacity 0.15s; display: none;
+}
+.next-btn-big:hover { opacity: 0.85; }
+
+/* ══════════════════════════════
+   RESULTS SCREEN
+══════════════════════════════ */
+#results {
+  align-items: center; justify-content: center;
+  padding: 2rem 1rem;
+  background: radial-gradient(ellipse at 50% 0%, #1a2a5e 0%, var(--bg) 70%);
+}
+.results-inner { max-width: 640px; width: 100%; }
+.grade-ring {
+  width: 140px; height: 140px;
+  border-radius: 50%; margin: 0 auto 1.5rem;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif;
+  position: relative;
+}
+.grade-letter { font-size: 3rem; font-weight: 900; line-height: 1; }
+.grade-sub { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 2px; color: var(--muted); margin-top: 0.2rem; }
+.results-inner h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; text-align: center; margin-bottom: 0.5rem; }
+.results-inner .subtitle { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 2rem; }
+.stat-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; }
+.stat-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; }
+.stat-num.g { color: var(--green); }
+.stat-num.r { color: var(--red); }
+.stat-num.b { color: var(--accent); }
+.stat-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin-top: 0.2rem; }
+
+.weak-section {
+  background: var(--card); border: 1.5px solid var(--border); border-radius: 10px; padding: 1.2rem; margin-bottom: 1.5rem;
+}
+.weak-section h3 { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+.weak-item { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+.weak-item:last-child { border: none; }
+.weak-score { font-family: var(--mono); font-size: 0.78rem; }
+
+.review-list { margin-bottom: 1.5rem; }
+.review-item {
+  background: var(--card); border-radius: 10px; padding: 1rem 1.1rem;
+  margin-bottom: 0.6rem; border-left: 3px solid var(--border);
+}
+.review-item.c { border-left-color: var(--green); }
+.review-item.w { border-left-color: var(--red); }
+.review-item.p { border-left-color: var(--gold); }
+.review-q { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.4rem; }
+.review-tag { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-bottom: 0.3rem; }
+.review-ans { font-size: 0.82rem; color: var(--muted); }
+.review-ans span { color: var(--text); }
+
+.restart-btn {
+  width: 100%; background: linear-gradient(135deg, var(--accent), var(--purple));
+  color: white; border: none; border-radius: 10px;
+  padding: 1rem; font-size: 1rem; font-weight: 700; cursor: pointer;
+  transition: opacity 0.15s; margin-bottom: 1rem;
+}
+.restart-btn:hover { opacity: 0.85; }
+
+@media (max-width: 500px) {
+  .stats-row { grid-template-columns: repeat(3, 1fr); }
+  .mode-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════ HOME ════════════════════ -->
+<div class="screen active" id="home">
+  <div class="home-inner">
+    <div class="logo-mark">Bio</div>
+    <h1>WAEC Biology<br><span>Practical Quiz</span></h1>
+    <p>Theory questions + Objectives · Type answers · Instant marking · Score report</p>
+
+    <div class="mode-grid" id="modeGrid">
+      <div class="mode-card selected" data-mode="mixed" onclick="selectMode(this)">
+        <div class="mode-icon">⚡</div>
+        <h3>Mixed Mode</h3>
+        <p>Theory + Objectives together</p>
+      </div>
+      <div class="mode-card" data-mode="theory" onclick="selectMode(this)">
+        <div class="mode-icon">✍️</div>
+        <h3>Theory Only</h3>
+        <p>Type full written answers</p>
+      </div>
+      <div class="mode-card" data-mode="obj" onclick="selectMode(this)">
+        <div class="mode-icon">🎯</div>
+        <h3>Objectives Only</h3>
+        <p>Multiple choice questions</p>
+      </div>
+      <div class="mode-card" data-mode="rapid" onclick="selectMode(this)">
+        <div class="mode-icon">🔥</div>
+        <h3>Rapid Fire</h3>
+        <p>10 random questions, timed</p>
+      </div>
+    </div>
+
+    <div class="specimen-picker">
+      <h3>Filter by Specimen (select all or specific)</h3>
+      <div class="spec-chips" id="specChips"></div>
+    </div>
+
+    <button class="start-btn" id="startBtn" onclick="startQuiz()">Start Quiz →</button>
+  </div>
+</div>
+
+<!-- ════════════════════ QUIZ ════════════════════ -->
+<div class="screen" id="quiz">
+  <div class="quiz-topbar">
+    <div class="left">
+      <button class="quit-btn" onclick="quitQuiz()">✕ QUIT</button>
+      <div id="timerDisplay" style="font-family:var(--mono);font-size:0.8rem;color:var(--gold);display:none;">⏱ <span id="timerVal">0:00</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="progressLabel">Question 1 of 0</span>
+        <span id="progressPct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div class="score-badge">✓ <span class="s" id="scoreCorrect">0</span> &nbsp;✗ <span class="f" id="scoreWrong">0</span></div>
+  </div>
+
+  <div class="quiz-body" id="quizBody"></div>
+</div>
+
+<!-- ════════════════════ RESULTS ════════════════════ -->
+<div class="screen" id="results">
+  <div class="results-inner">
+    <div class="grade-ring" id="gradeRing">
+      <div class="grade-letter" id="gradeLetter">—</div>
+      <div class="grade-sub">WAEC GRADE</div>
+    </div>
+    <h2 id="resultsTitle">Quiz Complete!</h2>
+    <p class="subtitle" id="resultsSubtitle"></p>
+
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num g" id="resCorrect">0</div><div class="stat-label">Correct</div></div>
+      <div class="stat-card"><div class="stat-num r" id="resWrong">0</div><div class="stat-label">Wrong</div></div>
+      <div class="stat-card"><div class="stat-num b" id="resPct">0%</div><div class="stat-label">Score</div></div>
+    </div>
+
+    <div class="weak-section" id="weakSection">
+      <h3>📌 Weak Areas — Revise These</h3>
+      <div id="weakList"></div>
+    </div>
+
+    <div class="review-list" id="reviewList"></div>
+
+    <button class="restart-btn" onclick="goHome()">← Back to Home</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   QUESTION BANK
+══════════════════════════════════════════════════════ */
+const QB = [
+
+  // ── SPECIMEN A — Groundnut Pod ──
+  { id:'A1', spec:'A', specimen:'Groundnut Pod', type:'obj',
+    q:'What is the scientific name of Specimen A (Groundnut)?',
+    options:['Zea mays','Arachis hypogaea','Solanum lycopersicum','Loranthus sp.'],
+    ans:1 },
+  { id:'A2', spec:'A', specimen:'Groundnut Pod', type:'obj',
+    q:'Specimen A belongs to which class of flowering plants?',
+    options:['Monocotyledonae','Pteridophyta','Dicotyledonae','Gymnospermae'],
+    ans:2 },
+  { id:'A3', spec:'A', specimen:'Groundnut Pod', type:'theory',
+    q:'State THREE observable features of Specimen A (Groundnut Pod).',
+    marks:3,
+    keywords:['brown','fibrous','rough','ridged','pod','seed','constrict','pointed','oval','elongated','dry','hard'],
+    model:'1. Brown/buff coloured outer pod wall\n2. Dry, fibrous texture of the pod\n3. Rough, ridged surface\n4. Contains 1–3 seeds inside the pod\n5. Constricted between seed positions\n6. Pointed at one end' },
+  { id:'A4', spec:'A', specimen:'Groundnut Pod', type:'theory',
+    q:'State the class of food substance predominantly stored in Specimen A (Groundnut).',
+    marks:1,
+    keywords:['lipid','fat','oil'],
+    model:'Lipid (oil / fat)' },
+  { id:'A5', spec:'A', specimen:'Groundnut Pod', type:'theory',
+    q:'State TWO economic importances of Specimen A.',
+    marks:2,
+    keywords:['oil','food','protein','feed','livestock','soap','cash crop','export'],
+    model:'1. Source of cooking oil / groundnut oil\n2. Important source of protein and fat in human diet\n3. Groundnut cake used as livestock feed\n4. Used in soap and lubricant manufacturing\n5. Major cash crop — exported for income' },
+  { id:'A6', spec:'A', specimen:'Groundnut Pod', type:'obj',
+    q:'Groundnut is described as geocarpic. What does this mean?',
+    options:['It grows very tall','Its fruits develop and ripen underground','It requires large amounts of water','Its seeds float on water'],
+    ans:1 },
+
+  // ── SPECIMEN B — Crushed Groundnut ──
+  { id:'B1', spec:'B', specimen:'Crushed Groundnut', type:'theory',
+    q:'Name the food test used to detect lipids in Specimen B (crushed groundnut) and state the expected result.',
+    marks:2,
+    keywords:['grease','translucent','stain','paper','ethanol','emulsion','milky','white'],
+    model:'Test: Grease spot test — rub Specimen B on white paper and hold to light.\nResult: A permanent, translucent (greasy) stain forms on the paper.\nAlternative: Ethanol emulsion test — dissolve in ethanol, pour into water → milky-white emulsion forms.' },
+  { id:'B2', spec:'B', specimen:'Crushed Groundnut', type:'obj',
+    q:'Which reagent is used to test for proteins?',
+    options:['Iodine solution','Benedict\'s reagent','Biuret reagent','Ethanol'],
+    ans:2 },
+  { id:'B3', spec:'B', specimen:'Crushed Groundnut', type:'obj',
+    q:'The Biuret test gives a ______ colour when protein is present.',
+    options:['Blue-black','Brick-red','Violet / purple','Yellow'],
+    ans:2 },
+
+  // ── SPECIMEN C — Water ──
+  { id:'C1', spec:'C', specimen:'Water', type:'obj',
+    q:'Specimen C (Water) is classified as:',
+    options:['A biotic factor','An abiotic factor','A biotic and abiotic factor','Neither biotic nor abiotic'],
+    ans:1 },
+  { id:'C2', spec:'C', specimen:'Water', type:'theory',
+    q:'State the effect of Specimen C (water) on plant cells in terms of osmosis.',
+    marks:2,
+    keywords:['turgid','osmosis','enters','hypotonic','water potential','absorb'],
+    model:'Water enters the plant cells by osmosis (since water is hypotonic / has higher water potential than the cell sap), causing the cells to become turgid.' },
+  { id:'C3', spec:'C', specimen:'Water', type:'obj',
+    q:'When plant cells are placed in pure water, they become:',
+    options:['Plasmolysed','Turgid','Flaccid','Shrunken'],
+    ans:1 },
+
+  // ── SPECIMEN D — Salt Solution ──
+  { id:'D1', spec:'D', specimen:'Salt Solution', type:'theory',
+    q:'State the effect of Specimen D (salt solution) on plant cells and name the biological process involved.',
+    marks:2,
+    keywords:['plasmolysis','flaccid','wilts','water leaves','hypertonic','osmosis','lower water potential'],
+    model:'Effect: Water leaves the plant cells by osmosis, causing them to become plasmolysed / flaccid / the plant wilts.\nProcess: Osmosis / Plasmolysis\nReason: Salt solution is hypertonic (lower water potential) compared to cell sap.' },
+  { id:'D2', spec:'D', specimen:'Salt Solution', type:'obj',
+    q:'A plant cell placed in a concentrated salt solution will undergo:',
+    options:['Turgidity','Osmosis into the cell','Plasmolysis','Cell division'],
+    ans:2 },
+  { id:'D3', spec:'D', specimen:'Salt Solution', type:'obj',
+    q:'Compared to cell sap, a salt solution is:',
+    options:['Hypotonic','Isotonic','Hypertonic','Neutral'],
+    ans:2 },
+
+  // ── COMPARISON C vs D ──
+  { id:'CD1', spec:'C', specimen:'Water vs Salt Solution', type:'theory',
+    q:'State THREE differences between the effect of Specimen C (water) and Specimen D (salt solution) on plant cells. (Use a table format)',
+    marks:3,
+    keywords:['turgid','plasmolysis','enters','leaves','hypotonic','hypertonic','erect','wilt'],
+    model:'Feature | Water (C) | Salt Solution (D)\n1. Effect on cell | Cell becomes turgid | Cell becomes plasmolysed/flaccid\n2. Direction of osmosis | Water enters the cell | Water leaves the cell\n3. Concentration | Hypotonic to cell sap | Hypertonic to cell sap\n4. Effect on plant | Plant becomes erect | Plant wilts' },
+
+  // ── SPECIMEN E — Sandy Soil ──
+  { id:'E1', spec:'E', specimen:'Sandy Soil', type:'obj',
+    q:'Which property is characteristic of sandy soil (Specimen E)?',
+    options:['High water retention','Fine, smooth particles','Large particles, poor nutrient content','Dark colour due to humus'],
+    ans:2 },
+  { id:'E2', spec:'E', specimen:'Sandy Soil', type:'theory',
+    q:'State TWO properties of Specimen E (sandy soil) and ONE disadvantage for plant growth.',
+    marks:3,
+    keywords:['coarse','large particle','drains','low water','low nutrient','gritty','light colour','poor humus','cannot retain'],
+    model:'Properties:\n1. Coarse, gritty texture with large particles\n2. Drains water quickly / has low water-holding capacity\n3. Light in colour (yellowish/grey)\nDisadvantage:\nSandy soil has low water retention and is poor in nutrients/humus, making it unable to adequately support most crop plants.' },
+
+  // ── SPECIMEN F — Alimentary Canal ──
+  { id:'F1', spec:'F', specimen:'Alimentary Canal', type:'theory',
+    q:'Identify Specimen F and name FOUR organs visible in it.',
+    marks:4,
+    keywords:['alimentary canal','digestive','oesophagus','stomach','small intestine','large intestine','rectum','anus','liver','pancreas'],
+    model:'Specimen F: Mammalian alimentary canal / digestive tract\nFour organs:\n1. Oesophagus (gullet)\n2. Stomach\n3. Small intestine\n4. Large intestine\n5. Rectum\n6. Anus' },
+  { id:'F2', spec:'F', specimen:'Alimentary Canal', type:'theory',
+    q:'State TWO digestive enzymes secreted in the stomach and state what each digests.',
+    marks:2,
+    keywords:['pepsin','protein','rennin','milk','casein','hydrochloric','gastric'],
+    model:'1. Pepsin — digests proteins into peptides\n2. Rennin — coagulates/curdles milk protein (casein) — active mainly in young mammals' },
+  { id:'F3', spec:'F', specimen:'Alimentary Canal', type:'obj',
+    q:'The main site of digestion and absorption of nutrients in Specimen F is:',
+    options:['Stomach','Oesophagus','Small intestine','Large intestine'],
+    ans:2 },
+  { id:'F4', spec:'F', specimen:'Alimentary Canal', type:'obj',
+    q:'The large intestine\'s primary function is to:',
+    options:['Digest proteins','Produce enzymes','Absorb water and form faeces','Secrete bile'],
+    ans:2 },
+  { id:'F5', spec:'F', specimen:'Alimentary Canal', type:'theory',
+    q:'State TWO observable features of the stomach in Specimen F.',
+    marks:2,
+    keywords:['sac','bag','muscular','wider','thick wall','connects','pyloric','rugae'],
+    model:'1. Sac-like / bag-shaped structure\n2. Thick muscular walls\n3. Wider than the oesophagus\n4. Connects to the small intestine through the pyloric sphincter\n5. Rugae (folds) visible on inner lining' },
+  { id:'F6', spec:'F', specimen:'Alimentary Canal', type:'theory',
+    q:'State TWO adaptations of the small intestine for efficient digestion and absorption.',
+    marks:2,
+    keywords:['long','villi','microvilli','surface area','absorption','peristalsis','muscular','enzyme','blood supply'],
+    model:'1. Very long length — increases time available for digestion and absorption\n2. Presence of villi and microvilli — greatly increases surface area for absorption of digested nutrients\n3. Rich blood supply — quickly transports absorbed nutrients away\n4. Glands secreting digestive enzymes — enables efficient chemical digestion' },
+  { id:'F7', spec:'F', specimen:'Alimentary Canal', type:'obj',
+    q:'Peristalsis in the alimentary canal refers to:',
+    options:['Secretion of digestive enzymes','Wave-like muscular contractions that move food along','Absorption of nutrients into the blood','Production of gastric acid'],
+    ans:1 },
+
+  // ── SPECIMEN G — Mistletoe ──
+  { id:'G1', spec:'G', specimen:'Mistletoe', type:'obj',
+    q:'The relationship between mistletoe (Specimen G) and its host plant is:',
+    options:['Mutualism','Commensalism','Parasitism','Predation'],
+    ans:2 },
+  { id:'G2', spec:'G', specimen:'Mistletoe', type:'theory',
+    q:'State TWO adaptive features of the mistletoe for its parasitic mode of life.',
+    marks:2,
+    keywords:['haustoria','penetrate','xylem','absorb','sticky','bird','dispersal','attach','green','photosynthesis'],
+    model:'1. Haustoria — modified roots that penetrate the host\'s vascular tissue (xylem) to absorb water and mineral salts\n2. Sticky seeds/berries — enable dispersal by birds to new host plants\n3. Green leaves — can photosynthesise, reducing total dependence on the host' },
+  { id:'G3', spec:'G', specimen:'Mistletoe', type:'theory',
+    q:'State TWO harmful effects of the mistletoe on its host plant.',
+    marks:2,
+    keywords:['water','minerals','stunted','poor growth','weaken','kill','reduces yield','compete'],
+    model:'1. Reduces the amount of water and minerals available to the host plant\n2. Causes stunted / poor growth of the host\n3. Can eventually weaken and kill the host plant\n4. Reduces yield of fruiting host trees (e.g. mango, citrus)' },
+  { id:'G4', spec:'G', specimen:'Mistletoe', type:'obj',
+    q:'The specialised absorptive organ of mistletoe that penetrates host tissue is called:',
+    options:['Stomata','Haustoria','Rhizoids','Tendrils'],
+    ans:1 },
+  { id:'G5', spec:'G', specimen:'Mistletoe', type:'obj',
+    q:'Mistletoe is best described as a:',
+    options:['Holoparasite (fully parasitic)','Hemiparasite (partially photosynthetic)','Free-living autotroph','Saprophyte'],
+    ans:1 },
+
+  // ── SPECIMEN H — Evaporated Milk ──
+  { id:'H1', spec:'H', specimen:'Evaporated Milk', type:'theory',
+    q:'Name the reagent used to test for protein in Specimen H (evaporated milk) and state the expected result.',
+    marks:2,
+    keywords:['biuret','NaOH','CuSO4','copper sulphate','sodium hydroxide','violet','purple'],
+    model:'Reagent: Biuret reagent (sodium hydroxide solution + copper sulphate solution)\nExpected result: Violet / purple colour appears.' },
+  { id:'H2', spec:'H', specimen:'Evaporated Milk', type:'obj',
+    q:'Specimen H (evaporated milk) is primarily rich in which food substance?',
+    options:['Starch','Protein and fat','Mineral salts only','Vitamin C'],
+    ans:1 },
+
+  // ── SPECIMEN J — Fresh Fish ──
+  { id:'J1', spec:'J', specimen:'Fresh Fish', type:'theory',
+    q:'State THREE observable external features of Specimen J (Fresh Fish).',
+    marks:3,
+    keywords:['scale','fin','operculum','streamlined','lateral line','eye','mouth','slimy','mucus','gill cover'],
+    model:'1. Scales covering the body surface\n2. Fins present — dorsal, caudal, pectoral, pelvic, anal\n3. Operculum (gill cover) on each side of the head\n4. Streamlined (fusiform) body shape\n5. Lateral line visible along the sides\n6. Eyes without eyelids' },
+  { id:'J2', spec:'J', specimen:'Fresh Fish', type:'theory',
+    q:'State THREE adaptive features of Specimen J (Fish) for aquatic life, explaining how each helps the fish.',
+    marks:3,
+    keywords:['streamlined','water resistance','gills','oxygen','fins','movement','lateral line','vibration','scale','mucus','friction'],
+    model:'1. Streamlined body — reduces water resistance, allowing efficient swimming\n2. Gills — extract dissolved oxygen from water for respiration\n3. Fins — provide propulsion, steering, and stability in water\n4. Scales with mucus — reduce friction as fish moves through water\n5. Lateral line — detects water currents, pressure, and vibrations' },
+  { id:'J3', spec:'J', specimen:'Fresh Fish', type:'obj',
+    q:'The organ responsible for gaseous exchange in Specimen J (fish) is:',
+    options:['Lungs','Gills','Skin','Swim bladder'],
+    ans:1 },
+  { id:'J4', spec:'J', specimen:'Fresh Fish', type:'obj',
+    q:'What is the function of the operculum in Specimen J?',
+    options:['Provides propulsion during swimming','Absorbs minerals from water','Protects the gills','Detects water currents'],
+    ans:2 },
+  { id:'J5', spec:'J', specimen:'Fresh Fish', type:'obj',
+    q:'The caudal fin of Specimen J is primarily responsible for:',
+    options:['Balance and stability','Steering and braking','Forward propulsion','Gaseous exchange'],
+    ans:2 },
+  { id:'J6', spec:'J', specimen:'Fresh Fish', type:'obj',
+    q:'What is the phylum of Specimen J (Fish)?',
+    options:['Arthropoda','Mollusca','Chordata','Annelida'],
+    ans:2 },
+  { id:'J7', spec:'J', specimen:'Fresh Fish', type:'theory',
+    q:'State TWO economic importances of fish (Specimen J).',
+    marks:2,
+    keywords:['protein','food','fishing','employment','fish oil','omega','feed','fishmeal','income','industry'],
+    model:'1. Major source of animal protein for millions of people\n2. Supports commercial and artisanal fishing industries / provides employment\n3. Source of fish oil (omega-3 fatty acids) used in nutrition and medicine\n4. Used as fishmeal for livestock and aquaculture feed' },
+
+  // ── SPECIMEN K — Maize Grain ──
+  { id:'K1', spec:'K', specimen:'Maize Grain', type:'obj',
+    q:'Maize (Specimen K) is classified as:',
+    options:['Dicotyledonous','Monocotyledonous','Gymnospermous','Pteridophytic'],
+    ans:1 },
+  { id:'K2', spec:'K', specimen:'Maize Grain', type:'theory',
+    q:'State THREE observable features of Specimen K (dry maize grain).',
+    marks:3,
+    keywords:['yellow','hard','dry','flat','hilum','cotyledon','pointed','small','compact','grain'],
+    model:'1. Yellow/cream coloured\n2. Hard and dry texture\n3. Small, compact grain shape\n4. Flat top with a depression (hilum/embryo point)\n5. Pointed base\n6. Single cotyledon (scutellum) visible when cut' },
+  { id:'K3', spec:'K', specimen:'Maize Grain', type:'obj',
+    q:'The food substance predominantly stored in the endosperm of Specimen K (maize) is:',
+    options:['Protein','Lipid (fat)','Carbohydrate (starch)','Vitamin C'],
+    ans:2 },
+  { id:'K4', spec:'K', specimen:'Maize Grain', type:'theory',
+    q:'Name the iodine test result that confirms the presence of starch in Specimen K.',
+    marks:1,
+    keywords:['blue-black','blue black','dark blue'],
+    model:'Blue-black coloration / dark blue colour when iodine solution is added.' },
+
+  // ── SPECIMEN A vs K COMPARISON ──
+  { id:'AK1', spec:'A', specimen:'Groundnut vs Maize', type:'theory',
+    q:'Tabulate THREE differences between Specimen A (Groundnut) and Specimen K (Maize grain).',
+    marks:3,
+    keywords:['cotyledon','monocot','dicot','starch','lipid','oil','venation','parallel','reticulate','taproot','fibrous','pod','caryopsis','grain'],
+    model:'Feature | Groundnut (A) | Maize (K)\n1. Cotyledon type | Dicotyledonous (2 cotyledons) | Monocotyledonous (1 cotyledon)\n2. Food reserve | Rich in lipid (oil/fat) | Rich in carbohydrate (starch)\n3. Leaf venation | Reticulate (netted) | Parallel\n4. Root type | Taproot system | Fibrous root system\n5. Fruit type | Pod (legume) | Grain (caryopsis)' },
+
+  // ── SPECIMEN L — Tomato Paste ──
+  { id:'L1', spec:'L', specimen:'Tomato Paste', type:'obj',
+    q:'Compared to fresh tomato, tomato paste (Specimen L) has:',
+    options:['Higher water content','More microorganisms','Longer shelf-life and concentrated nutrients','Less red pigment'],
+    ans:2 },
+
+  // ── SPECIMEN M — Fresh Tomato ──
+  { id:'M1', spec:'M', specimen:'Fresh Tomato', type:'theory',
+    q:'State THREE observable features of Specimen M (Fresh Tomato).',
+    marks:3,
+    keywords:['red','smooth','shiny','round','spherical','firm','fleshy','calyx','sepal','juicy','seeds','skin'],
+    model:'1. Bright red colour\n2. Smooth, shiny surface\n3. Round/spherical shape\n4. Firm, fleshy texture\n5. Green calyx (sepals) visible at the base\n6. Contains seeds when cut open' },
+  { id:'M2', spec:'M', specimen:'Fresh Tomato', type:'obj',
+    q:'What type of fruit is Specimen M (tomato)?',
+    options:['Drupe','Legume (pod)','Berry','Hesperidium'],
+    ans:2 },
+  { id:'M3', spec:'M', specimen:'Fresh Tomato', type:'theory',
+    q:'State TWO economic importances of Specimen M (fresh tomato).',
+    marks:2,
+    keywords:['food','soup','stew','vitamin','lycopene','cash crop','income','paste','ketchup','juice','antioxidant'],
+    model:'1. Used as food in cooking (soups, stews, salads)\n2. Source of vitamins A and C and lycopene (antioxidant)\n3. Important cash crop generating income for farmers\n4. Raw material for tomato paste, ketchup, and juice industries' },
+
+  // ── SPECIMEN N — Rotten Tomato ──
+  { id:'N1', spec:'N', specimen:'Rotten Tomato', type:'theory',
+    q:'Identify the biological process responsible for the condition of Specimen N (rotten tomato) and name TWO organisms responsible.',
+    marks:3,
+    keywords:['decomposition','putrefaction','decay','fungi','bacteria','mould','microorganism'],
+    model:'Process: Decomposition / Putrefaction / Decay\nOrganisms responsible:\n1. Fungi (moulds)\n2. Bacteria' },
+  { id:'N2', spec:'N', specimen:'Rotten Tomato', type:'theory',
+    q:'State THREE conditions that favour the decomposition of Specimen N.',
+    marks:3,
+    keywords:['moisture','temperature','warm','microorganism','oxygen','humidity','heat'],
+    model:'1. Presence of moisture / high humidity\n2. Warm temperature\n3. Presence of decomposing microorganisms (bacteria and fungi)\n4. Availability of oxygen (for aerobic decomposition)' },
+  { id:'N3', spec:'N', specimen:'Rotten Tomato', type:'obj',
+    q:'Which of the following is NOT a condition that favours decomposition of Specimen N?',
+    options:['Moisture','Warm temperature','Presence of microorganisms','Extreme cold temperature'],
+    ans:3 },
+  { id:'N4', spec:'N', specimen:'Rotten Tomato', type:'theory',
+    q:'State ONE method of preventing the decay observed in Specimen N.',
+    marks:1,
+    keywords:['refrigerate','cold storage','canning','dry','dehydrate','preservative','salt','freeze'],
+    model:'1. Refrigeration / cold storage — low temperature slows microbial growth\n2. Canning — seals out oxygen and microorganisms\n3. Drying / dehydration — removes moisture needed by microorganisms\n4. Use of chemical preservatives' },
+
+  // ── SPECIMEN M vs N COMPARISON ──
+  { id:'MN1', spec:'M', specimen:'Fresh vs Rotten Tomato', type:'theory',
+    q:'Tabulate THREE differences between Specimen M (fresh tomato) and Specimen N (rotten tomato).',
+    marks:3,
+    keywords:['firm','soft','red','discolour','smell','pleasant','foul','edible','inedible','smooth','shrivelled'],
+    model:'Feature | Fresh Tomato (M) | Rotten Tomato (N)\n1. Texture | Firm and turgid | Soft and mushy\n2. Smell | Pleasant / fresh smell | Offensive / foul smell\n3. Colour | Bright red | Dull, discoloured (brown/black patches)\n4. Edibility | Edible and safe | Not edible — unsafe to eat\n5. Skin condition | Smooth, intact skin | Shrivelled, broken skin' },
+
+  // ── SPECIMEN P — Thermometer ──
+  { id:'P1', spec:'P', specimen:'Thermometer', type:'obj',
+    q:'Specimen P (thermometer) measures which abiotic factor?',
+    options:['Humidity','Wind speed','Temperature','Light intensity'],
+    ans:2 },
+  { id:'P2', spec:'P', specimen:'Thermometer', type:'theory',
+    q:'State ONE way temperature (measured by Specimen P) affects organisms in an ecosystem.',
+    marks:1,
+    keywords:['enzyme','metabolic','rate','kill','migration','hibernation','growth','photosynthesis','respiration'],
+    model:'Temperature affects the rate of metabolic processes and enzyme activity in organisms; extreme temperatures can kill organisms, cause migration, or trigger hibernation.' },
+
+  // ── SPECIMEN Q — Metre Rule ──
+  { id:'Q1', spec:'Q', specimen:'Metre Rule', type:'obj',
+    q:'Specimen Q (metre rule) is primarily used in ecology to:',
+    options:['Count organisms per unit area','Measure temperature changes','Measure linear distances and dimensions','Detect soil moisture'],
+    ans:2 },
+
+  // ── SPECIMEN R — Quadrat ──
+  { id:'R1', spec:'R', specimen:'Quadrat', type:'theory',
+    q:'Identify Specimen R and describe how it is used to estimate the population of a plant in a habitat.',
+    marks:4,
+    keywords:['quadrat','throw','randomly','count','mean','multiply','area','population density','sample','repeat'],
+    model:'Specimen R: Quadrat (ecological sampling frame)\nMethod:\n1. Throw the quadrat randomly into the study area several times\n2. Count the number of the target plant species within each quadrat\n3. Calculate the mean number per quadrat\n4. Multiply the mean by the total study area to estimate total population' },
+  { id:'R2', spec:'R', specimen:'Quadrat', type:'obj',
+    q:'What is the main purpose of Specimen R (quadrat) in ecological studies?',
+    options:['Measuring temperature','Estimating population density and distribution of organisms','Collecting soil samples','Measuring plant height'],
+    ans:1 },
+  { id:'R3', spec:'R', specimen:'Quadrat', type:'obj',
+    q:'For an unbiased ecological survey using Specimen R, quadrats should be placed:',
+    options:['Only in areas with the most organisms','At regular intervals along a straight line only','Randomly in the study area','Only in shaded areas'],
+    ans:2 },
+
+  // ── ECOLOGICAL INSTRUMENTS COMPARISON ──
+  { id:'PQR1', spec:'P', specimen:'P vs Q vs R (Instruments)', type:'theory',
+    q:'State the ecological use of each of Specimen P (thermometer), Q (metre rule), and R (quadrat).',
+    marks:3,
+    keywords:['thermometer','temperature','metre rule','distance','length','quadrat','population','density','count'],
+    model:'Specimen P (Thermometer): Measures temperature as an abiotic factor in an ecosystem.\nSpecimen Q (Metre Rule): Measures linear distances — transect lengths, plant heights, quadrat dimensions.\nSpecimen R (Quadrat): Used to estimate population density / distribution / frequency of organisms in a defined habitat area.' },
+
+  // ── FOOD TESTS (General) ──
+  { id:'FT1', spec:'K', specimen:'Food Tests', type:'obj',
+    q:'Which reagent is used to test for starch, and what is the positive result?',
+    options:['Biuret → purple','Iodine → blue-black','Benedict\'s → brick-red','Ethanol → milky white'],
+    ans:1 },
+  { id:'FT2', spec:'M', specimen:'Food Tests', type:'obj',
+    q:'The positive result of Benedict\'s test indicates the presence of:',
+    options:['Starch','Protein','Reducing sugar','Lipid'],
+    ans:2 },
+  { id:'FT3', spec:'B', specimen:'Food Tests', type:'theory',
+    q:'State the food test for each: (a) starch  (b) protein  (c) reducing sugar  (d) fats',
+    marks:4,
+    keywords:['iodine','blue-black','biuret','violet','purple','benedict','brick-red','grease','translucent','ethanol','emulsion','milky'],
+    model:'(a) Starch: Iodine solution → Blue-black colour\n(b) Protein: Biuret reagent (NaOH + CuSO₄) → Violet/purple colour\n(c) Reducing sugar: Benedict\'s reagent + heat → Brick-red/orange precipitate\n(d) Fats: Grease spot test → Permanent translucent stain  OR  Ethanol emulsion test → Milky-white emulsion' },
+
+  // ── CLASSIFICATION ──
+  { id:'CL1', spec:'J', specimen:'Classification', type:'obj',
+    q:'A fish belongs to which class?',
+    options:['Amphibia','Reptilia','Osteichthyes / Actinopterygii','Mammalia'],
+    ans:2 },
+  { id:'CL2', spec:'G', specimen:'Classification', type:'obj',
+    q:'Mistletoe (Loranthus sp.) belongs to which division of plants?',
+    options:['Bryophyta','Pteridophyta','Angiospermophyta','Gymnospermophyta'],
+    ans:2 },
+  { id:'CL3', spec:'A', specimen:'Classification', type:'obj',
+    q:'Which of the following is a monocotyledonous plant?',
+    options:['Groundnut','Tomato','Maize','Mistletoe'],
+    ans:2 },
+
+  // ── PARASITISM EXTENDED ──
+  { id:'PAR1', spec:'G', specimen:'Parasitism', type:'obj',
+    q:'In parasitism, the organism that benefits is called the:',
+    options:['Host','Parasite','Commensal','Mutualist'],
+    ans:1 },
+  { id:'PAR2', spec:'G', specimen:'Parasitism', type:'obj',
+    q:'Which ecological relationship does Specimen G demonstrate?',
+    options:['Mutualism — both organisms benefit','Commensalism — one benefits, one unaffected','Parasitism — one benefits at the expense of the other','Predation — one kills and eats the other'],
+    ans:2 },
+
+  // ── DIGESTION ──
+  { id:'DIG1', spec:'F', specimen:'Digestion', type:'obj',
+    q:'Mechanical digestion differs from chemical digestion in that mechanical digestion:',
+    options:['Uses enzymes to break down food','Produces absorbable molecules','Physically breaks food into smaller pieces without enzymes','Occurs only in the small intestine'],
+    ans:2 },
+  { id:'DIG2', spec:'F', specimen:'Digestion', type:'theory',
+    q:'State TWO differences between mechanical digestion and chemical digestion.',
+    marks:2,
+    keywords:['enzyme','physical','chemical','teeth','churning','absorbable','soluble','molecules','location','mouth','stomach'],
+    model:'Feature | Mechanical | Chemical\n1. Enzymes | No enzymes involved | Enzymes required\n2. Process | Physical breakdown (chewing/churning) | Enzymatic/chemical breakdown\n3. Products | Smaller food particles — not absorbable | Soluble molecules — absorbable\n4. Location | Mouth and stomach | Mouth, stomach, small intestine' },
+];
+
+/* ══════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════ */
+let state = {
+  mode: 'mixed',
+  selectedSpecs: new Set(),
+  allSpecs: [...new Set(QB.map(q => q.spec))],
+  questions: [],
+  current: 0,
+  correct: 0,
+  wrong: 0,
+  results: [],
+  answered: false,
+  timerInterval: null,
+  timerSeconds: 0,
+};
+
+/* ══════════════════════════════════════════════════════
+   INIT HOME
+══════════════════════════════════════════════════════ */
+function initHome() {
+  const chips = document.getElementById('specChips');
+  // ALL chip
+  chips.innerHTML = `<div class="spec-chip on" data-spec="ALL" onclick="toggleSpec(this)">ALL</div>`;
+  state.allSpecs.forEach(s => {
+    const q = QB.find(x => x.spec === s);
+    chips.innerHTML += `<div class="spec-chip" data-spec="${s}" onclick="toggleSpec(this)">${s} — ${q ? q.specimen.split(' ')[0] : ''}</div>`;
+  });
+  state.selectedSpecs = new Set(['ALL']);
+}
+
+function toggleSpec(el) {
+  const spec = el.dataset.spec;
+  if (spec === 'ALL') {
+    state.selectedSpecs = new Set(['ALL']);
+    document.querySelectorAll('.spec-chip').forEach(c => c.classList.remove('on'));
+    el.classList.add('on');
+    return;
+  }
+  state.selectedSpecs.delete('ALL');
+  document.querySelector('.spec-chip[data-spec="ALL"]').classList.remove('on');
+  if (state.selectedSpecs.has(spec)) {
+    state.selectedSpecs.delete(spec);
+    el.classList.remove('on');
+  } else {
+    state.selectedSpecs.add(spec);
+    el.classList.add('on');
+  }
+  if (state.selectedSpecs.size === 0) {
+    state.selectedSpecs.add('ALL');
+    document.querySelector('.spec-chip[data-spec="ALL"]').classList.add('on');
+  }
+}
+
+function selectMode(el) {
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.mode = el.dataset.mode;
+}
+
+/* ══════════════════════════════════════════════════════
+   START
+══════════════════════════════════════════════════════ */
+function startQuiz() {
+  let pool = [...QB];
+  // Filter by specimen
+  if (!state.selectedSpecs.has('ALL')) {
+    pool = pool.filter(q => state.selectedSpecs.has(q.spec));
+  }
+  // Filter by type
+  if (state.mode === 'theory') pool = pool.filter(q => q.type === 'theory');
+  if (state.mode === 'obj') pool = pool.filter(q => q.type === 'obj');
+  if (state.mode === 'rapid') { pool = shuffle(pool).slice(0, 10); }
+  else pool = shuffle(pool);
+
+  if (pool.length === 0) { alert('No questions match your selection. Try different filters.'); return; }
+
+  state.questions = pool;
+  state.current = 0;
+  state.correct = 0;
+  state.wrong = 0;
+  state.results = [];
+  state.answered = false;
+
+  showScreen('quiz');
+  if (state.mode === 'rapid') startTimer();
+  renderQuestion();
+}
+
+function startTimer() {
+  state.timerSeconds = 0;
+  document.getElementById('timerDisplay').style.display = 'flex';
+  state.timerInterval = setInterval(() => {
+    state.timerSeconds++;
+    const m = Math.floor(state.timerSeconds/60);
+    const s = state.timerSeconds % 60;
+    document.getElementById('timerVal').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(state.timerInterval);
+}
+
+/* ══════════════════════════════════════════════════════
+   RENDER QUESTION
+══════════════════════════════════════════════════════ */
+function renderQuestion() {
+  const q = state.questions[state.current];
+  const total = state.questions.length;
+  state.answered = false;
+
+  // Update topbar
+  document.getElementById('progressLabel').textContent = `Question ${state.current+1} of ${total}`;
+  const pct = Math.round(((state.current)/total)*100);
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('scoreCorrect').textContent = state.correct;
+  document.getElementById('scoreWrong').textContent = state.wrong;
+
+  const body = document.getElementById('quizBody');
+
+  let html = `
+    <div class="q-number">Question ${state.current+1} of ${total}</div>
+    <div>
+      <span class="q-specimen-tag">Specimen ${q.spec} — ${q.specimen}</span>
+      <span class="q-type-tag ${q.type === 'theory' ? 'theory' : 'obj'}">${q.type === 'theory' ? '✍ Theory' : '🎯 Objective'}</span>
+    </div>
+    <div class="q-text">${q.q}</div>
+  `;
+
+  if (q.type === 'obj') {
+    html += `<div class="options-grid" id="optGrid">`;
+    const letters = ['A','B','C','D'];
+    q.options.forEach((opt, i) => {
+      html += `<button class="option-btn" data-idx="${i}" onclick="selectOption(this,${i})">
+        <span class="opt-letter">${letters[i]}</span> ${opt}
+      </button>`;
+    });
+    html += `</div>`;
+    html += `<div class="feedback-box" id="feedbackBox"></div>`;
+    html += `<button class="next-btn-big" id="nextBtn" onclick="nextQuestion()">Next Question →</button>`;
+  } else {
+    const marksText = q.marks === 1 ? '1 mark' : `${q.marks} marks`;
+    html += `<div class="marks-hint">[ ${marksText} ] — Write your full answer below</div>`;
+    html += `<textarea class="theory-area" id="theoryInput" placeholder="Type your answer here..." rows="5"></textarea>`;
+    html += `<div class="btn-row">
+      <button class="action-btn primary" onclick="checkTheory()">Check My Answer</button>
+      <button class="action-btn secondary" onclick="showModelAnswer()">Show Model Answer</button>
+    </div>`;
+    html += `<div class="feedback-box" id="feedbackBox"></div>`;
+    html += `<button class="next-btn-big" id="nextBtn" onclick="nextQuestion()">Next Question →</button>`;
+  }
+
+  body.innerHTML = html;
+  body.scrollTop = 0;
+  window.scrollTo(0,0);
+}
+
+/* ══════════════════════════════════════════════════════
+   OBJECTIVE LOGIC
+══════════════════════════════════════════════════════ */
+function selectOption(el, idx) {
+  if (state.answered) return;
+  state.answered = true;
+  const q = state.questions[state.current];
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const isCorrect = idx === q.ans;
+  if (isCorrect) {
+    el.classList.add('correct');
+    state.correct++;
+  } else {
+    el.classList.add('wrong');
+    btns[q.ans].classList.add('reveal-correct');
+    state.wrong++;
+  }
+
+  const fb = document.getElementById('feedbackBox');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    fb.className = 'feedback-box correct';
+    fb.innerHTML = `<div class="feedback-title">✓ Correct!</div><p>${q.options[q.ans]}</p>`;
+  } else {
+    fb.className = 'feedback-box wrong';
+    fb.innerHTML = `<div class="feedback-title">✗ Wrong</div>
+      <p>You chose: <em>${q.options[idx]}</em></p>
+      <div class="model-answer"><strong>Correct Answer:</strong><p>${q.options[q.ans]}</p></div>`;
+  }
+
+  state.results.push({ q: q.q, spec: q.spec, specimen: q.specimen, type: q.type, correct: isCorrect, model: q.options[q.ans], userAns: q.options[idx] });
+  document.getElementById('nextBtn').style.display = 'block';
+  updateTopScore();
+}
+
+/* ══════════════════════════════════════════════════════
+   THEORY LOGIC
+══════════════════════════════════════════════════════ */
+function checkTheory() {
+  if (state.answered) return;
+  const q = state.questions[state.current];
+  const input = document.getElementById('theoryInput').value.trim().toLowerCase();
+  if (!input) { alert('Please type your answer first.'); return; }
+
+  state.answered = true;
+  const ta = document.getElementById('theoryInput');
+
+  // Keyword matching
+  const hits = q.keywords.filter(kw => input.includes(kw.toLowerCase()));
+  const threshold = Math.max(2, Math.floor(q.keywords.length * 0.35));
+  const isGood = hits.length >= threshold;
+  const isPartial = !isGood && hits.length >= 1;
+
+  if (isGood) {
+    state.correct++;
+    ta.classList.add('correct-border');
+  } else {
+    state.wrong++;
+    ta.classList.add('wrong-border');
+  }
+
+  const fb = document.getElementById('feedbackBox');
+  fb.style.display = 'block';
+
+  let kwHtml = `<div class="keyword-chips">`;
+  q.keywords.forEach(kw => {
+    const hit = input.includes(kw.toLowerCase());
+    kwHtml += `<span class="kw-chip ${hit ? 'hit' : 'miss'}">${hit ? '✓' : '✗'} ${kw}</span>`;
+  });
+  kwHtml += `</div>`;
+
+  if (isGood) {
+    fb.className = 'feedback-box correct';
+    fb.innerHTML = `<div class="feedback-title">✓ Good Answer! Key points covered:</div>${kwHtml}
+      <div class="model-answer"><strong>Model Answer:</strong><p>${q.model.replace(/\n/g,'<br>')}</p></div>`;
+  } else if (isPartial) {
+    fb.className = 'feedback-box partial';
+    fb.innerHTML = `<div class="feedback-title">⚠ Partial — some key points missing:</div>${kwHtml}
+      <div class="model-answer"><strong>Model Answer:</strong><p>${q.model.replace(/\n/g,'<br>')}</p></div>`;
+  } else {
+    fb.className = 'feedback-box wrong';
+    fb.innerHTML = `<div class="feedback-title">✗ Key points missed — study the model answer:</div>${kwHtml}
+      <div class="model-answer"><strong>Model Answer:</strong><p>${q.model.replace(/\n/g,'<br>')}</p></div>`;
+  }
+
+  state.results.push({ q: q.q, spec: q.spec, specimen: q.specimen, type: q.type, correct: isGood, partial: isPartial, model: q.model, userAns: document.getElementById('theoryInput').value.trim() });
+  document.getElementById('nextBtn').style.display = 'block';
+  updateTopScore();
+}
+
+function showModelAnswer() {
+  if (state.answered) return;
+  state.answered = true;
+  state.wrong++;
+  const q = state.questions[state.current];
+  const fb = document.getElementById('feedbackBox');
+  fb.style.display = 'block';
+  fb.className = 'feedback-box partial';
+  fb.innerHTML = `<div class="feedback-title">📖 Model Answer (Shown — marked as missed):</div>
+    <div class="model-answer"><p>${q.model.replace(/\n/g,'<br>')}</p></div>`;
+  const ta = document.getElementById('theoryInput');
+  ta.classList.add('wrong-border');
+  state.results.push({ q: q.q, spec: q.spec, specimen: q.specimen, type: q.type, correct: false, partial: false, model: q.model, userAns: '(model answer shown)' });
+  document.getElementById('nextBtn').style.display = 'block';
+  updateTopScore();
+}
+
+function updateTopScore() {
+  document.getElementById('scoreCorrect').textContent = state.correct;
+  document.getElementById('scoreWrong').textContent = state.wrong;
+}
+
+/* ══════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════ */
+function nextQuestion() {
+  state.current++;
+  if (state.current >= state.questions.length) {
+    showResults();
+    return;
+  }
+  renderQuestion();
+}
+
+function quitQuiz() {
+  if (confirm('Quit quiz? Your current progress will be saved to results.')) {
+    showResults();
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   RESULTS
+══════════════════════════════════════════════════════ */
+function showResults() {
+  stopTimer();
+  showScreen('results');
+  const total = state.results.length;
+  const correct = state.results.filter(r => r.correct).length;
+  const wrong = total - correct;
+  const pct = total > 0 ? Math.round((correct/total)*100) : 0;
+
+  // Grade
+  let grade, gradeColor;
+  if (pct >= 75) { grade = 'A1'; gradeColor = '#22c55e'; }
+  else if (pct >= 70) { grade = 'B2'; gradeColor = '#4ade80'; }
+  else if (pct >= 65) { grade = 'B3'; gradeColor = '#86efac'; }
+  else if (pct >= 60) { grade = 'C4'; gradeColor = '#4f8ef7'; }
+  else if (pct >= 55) { grade = 'C5'; gradeColor = '#93c5fd'; }
+  else if (pct >= 50) { grade = 'C6'; gradeColor = '#bfdbfe'; }
+  else if (pct >= 45) { grade = 'D7'; gradeColor = '#f59e0b'; }
+  else if (pct >= 40) { grade = 'E8'; gradeColor = '#f97316'; }
+  else { grade = 'F9'; gradeColor = '#ef4444'; }
+
+  const ring = document.getElementById('gradeRing');
+  ring.style.background = `conic-gradient(${gradeColor} ${pct*3.6}deg, #1a1f35 0deg)`;
+  ring.style.boxShadow = `0 0 40px ${gradeColor}55`;
+  document.getElementById('gradeLetter').textContent = grade;
+  document.getElementById('gradeLetter').style.color = gradeColor;
+
+  document.getElementById('resultsTitle').textContent = pct >= 70 ? '🎉 Excellent Work!' : pct >= 50 ? '📚 Good Effort!' : '⚠ More Revision Needed';
+  document.getElementById('resultsSubtitle').textContent = `You scored ${correct} out of ${total} questions (${pct}%) — WAEC Grade: ${grade}`;
+  document.getElementById('resCorrect').textContent = correct;
+  document.getElementById('resWrong').textContent = wrong;
+  document.getElementById('resPct').textContent = pct + '%';
+
+  // Weak areas
+  const specMap = {};
+  state.results.forEach(r => {
+    if (!specMap[r.specimen]) specMap[r.specimen] = { total:0, correct:0 };
+    specMap[r.specimen].total++;
+    if (r.correct) specMap[r.specimen].correct++;
+  });
+  const weakAreas = Object.entries(specMap).sort((a,b) => (a[1].correct/a[1].total) - (b[1].correct/b[1].total)).slice(0,5);
+  const weakList = document.getElementById('weakList');
+  weakList.innerHTML = weakAreas.map(([name, data]) => {
+    const p = Math.round((data.correct/data.total)*100);
+    const color = p >= 70 ? 'var(--green)' : p >= 50 ? 'var(--gold)' : 'var(--red)';
+    return `<div class="weak-item"><span>${name}</span><span class="weak-score" style="color:${color}">${p}% (${data.correct}/${data.total})</span></div>`;
+  }).join('');
+
+  // Review list
+  const reviewList = document.getElementById('reviewList');
+  reviewList.innerHTML = `<div style="font-family:var(--mono);font-size:0.7rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:0.8rem;">Question Review</div>` +
+    state.results.map((r, i) => {
+      const cls = r.correct ? 'c' : (r.partial ? 'p' : 'w');
+      const icon = r.correct ? '✓' : (r.partial ? '~' : '✗');
+      return `<div class="review-item ${cls}">
+        <div class="review-tag">Q${i+1} · Specimen ${r.spec} · ${r.type === 'theory' ? 'Theory' : 'Objective'} ${icon}</div>
+        <div class="review-q">${r.q.length > 90 ? r.q.slice(0,90)+'…' : r.q}</div>
+        ${!r.correct ? `<div class="review-ans">Model: <span>${r.model.split('\n')[0].slice(0,80)}…</span></div>` : ''}
+      </div>`;
+    }).join('');
+}
+
+function goHome() {
+  showScreen('home');
+}
+
+/* ══════════════════════════════════════════════════════
+   UTILS
+══════════════════════════════════════════════════════ */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+// Init
+initHome();
+</script>
+</body>
+</html>
